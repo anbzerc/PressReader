@@ -1,0 +1,54 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:pressreaderflutter/media/opex360.dart';
+
+class Journaux extends StatelessWidget {
+  const Journaux({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+
+  @override
+  Widget contenuJournaux(BuildContext context){
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          //thematiques
+          Row(),
+          //Media
+          Row(
+            children: [
+              SizedBox(
+                  width: 350,
+                  height: 190,
+                  child:GestureDetector(
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> Opex360())),
+                    child: Card(
+                        semanticContainer: true,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                        margin: EdgeInsets.all(10.0),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            ClipRRect(borderRadius: BorderRadius.circular(15.0),
+                              child: Image.asset("assets/globe.jpg"),),
+                            Text("Opex360", style: TextStyle(fontSize: 25, fontFamily: "titre", color: Colors.blue),),
+
+                          ],
+                        )
+                    ),
+                  )
+              )
+
+            ],
+          )
+        ],
+      ),
+    );
+
+  }
+}
