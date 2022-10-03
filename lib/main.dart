@@ -3,7 +3,7 @@ import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:pressreaderflutter/article.dart';
 import 'package:pressreaderflutter/pages/Journaux.dart';
-import 'package:pressreaderflutter/Lefigaro.dart';
+import 'package:pressreaderflutter/media/Lefigaro.dart';
 import 'package:pressreaderflutter/article.dart';
 import 'package:pressreaderflutter/media/opex360.dart';
 void main() {

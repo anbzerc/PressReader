@@ -1,7 +1,9 @@
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pressreaderflutter/Lefigaro.dart';
+import 'package:pressreaderflutter/media/Lefigaro.dart';
 
 import 'media/opex360.dart';
 class ListeArticle{
@@ -34,9 +36,7 @@ class Article {
     required this.contenu,
     required this.date
 });
-  factory Article.titre(String titre){
-    return Article(title: titre, auteur: "auteur", description: "description", urlImage: "urlImage", contenu: "contenu", date: "date");
-  }
+
 }
 
 class ArticleLayout extends StatelessWidget {
@@ -93,27 +93,45 @@ class ListeArticleLayout extends StatelessWidget {
 
   @override
   Widget ListViewArticleLayout(ListeArticle article){
-    return Padding(
-        padding: EdgeInsets.all(19),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ClipRRect(
-                    child: Image.network(article.urlimage),
-                    borderRadius: BorderRadius.circular(10),
+    return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(19, 22, 19, 0),
+                    child: ClipRRect(
+                          child: Image.network(article.urlimage, filterQuality: FilterQuality.high),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                   ),
-                
-                Text(article.titre.replaceAll("  ", ""), style: TextStyle(fontSize: 17, fontFamily: "sansserif"), textAlign: TextAlign.start, ),
-                Text(article.date, style: TextStyle(fontSize: 17, fontFamily: "sansserif"), textAlign: TextAlign.start, )
-                    
-          
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(19, 10, 19, 0),
+                    child: Image.asset("assets/zone-militaire.png", width: 96.66666666666667, height: 23.333333333333332, filterQuality: FilterQuality.high,),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(19, 0, 19, 0),
+                    child: Text(article.titre.replaceAll(article.titre[2], ""), style: TextStyle(fontSize: 17, fontFamily: "sansserif"), textAlign: TextAlign.left, ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(19, 0, 19, 0),
+                    child: Text(article.date, style: TextStyle(fontSize: 12, fontFamily: "sansserif"), textAlign: TextAlign.start, ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(19, 10, 19, 0),
+                    child: Divider(
+                      color: Colors.grey,
+
+                    ),
+                  )
 
 
 
-        ],
-      ),
-    );
+
+
+          ],
+        );
 
 
   }

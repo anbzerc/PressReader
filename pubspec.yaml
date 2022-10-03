@@ -37,6 +37,9 @@ dependencies:
   chaleno: ^0.0.6
   bottom_bar: ^2.0.2
   web_scraper: ^0.1.4
+  cached_network_image: ^3.2.2
+  sqflite: any
+  path: any
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -61,6 +64,8 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
+    - assets/zone-militaire.png
+    - assets/globe.jpg
   fonts:
     - family: Caveat
       fonts:
