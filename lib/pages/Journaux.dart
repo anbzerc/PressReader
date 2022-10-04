@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pressreaderflutter/media/Lefigaro.dart';
 import 'package:pressreaderflutter/media/opex360.dart';
 
 class Journaux extends StatelessWidget {
@@ -19,7 +20,7 @@ class Journaux extends StatelessWidget {
           //thematiques
           Row(),
           //Media
-          Row(
+          Column(
             children: [
               SizedBox(
                   width: 330,
@@ -47,7 +48,7 @@ class Journaux extends StatelessWidget {
                   width: 330,
                   height: 190,
                   child:GestureDetector(
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> Opex360())),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> LeFigaro())),
                     child: Card(
                         semanticContainer: true,
                         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -58,7 +59,7 @@ class Journaux extends StatelessWidget {
                           children: [
                             ClipRRect(borderRadius: BorderRadius.circular(15.0),
                               child: Image.asset("assets/globe.jpg"),),
-                            Text("Opex360", style: TextStyle(fontSize: 25, fontFamily: "titre", color: Colors.blue),),
+                            Text("Le figaro", style: TextStyle(fontSize: 25, fontFamily: "titre", color: Colors.blue),),
 
                           ],
                         )

@@ -10,7 +10,7 @@ class ListeArticle{
   final String url;
   final String titre;
   final String urlimage;
-  final String date;
+  final DateTime date;
 
   const ListeArticle({
     required this.url,
@@ -18,6 +18,18 @@ class ListeArticle{
     required this.urlimage,
     required this.date
 });
+
+  Map<String, dynamic> toMap(){
+    return {
+      'url' : url,
+      'titre' : titre,
+      'urlimage' : urlimage,
+      'date' : date,
+    };
+  }
+
+  factory   ListeArticle.fromMap(Map<String, dynamic> map) => ListeArticle(
+      url: map['url'], titre: map['titre'], urlimage: map['urlimage'], date: map['date']);
 
 }
 class Article {
@@ -116,7 +128,7 @@ class ListeArticleLayout extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(19, 0, 19, 0),
-                    child: Text(article.date, style: TextStyle(fontSize: 12, fontFamily: "sansserif"), textAlign: TextAlign.start, ),
+                    child: Text(article.date.toString(), style: TextStyle(fontSize: 12, fontFamily: "sansserif"), textAlign: TextAlign.start, ),
                   ),
                   const Padding(
                     padding: EdgeInsets.fromLTRB(19, 10, 19, 0),

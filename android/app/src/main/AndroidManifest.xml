@@ -2,7 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="fr.caelzero.pressreaderflutter">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
    <application
+       android:requestLegacyExternalStorage="true"
         android:label="pressreaderflutter"
         android:name="${applicationName}"
         android:usesCleartextTraffic="true"

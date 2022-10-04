@@ -675,7 +675,7 @@ Future<Article> opex360(url) async {
 Future<List<ListeArticle>> listeOpex360() async {
 //Getting the response from the targeted url
   final response = await Chaleno().load("http://www.opex360.com/");
-
+/* TODO opex360 from xml*/
   try {
     //Scrape tout les articles
     
@@ -716,21 +716,21 @@ Future<List<ListeArticle>> listeOpex360() async {
     if(TouteLesUrlImage.length == urls!.length){
       for(var e in urls)
       {
-        listearticle.add(ListeArticle(date: datefinale[index],url: urls[index].html!.split('href="')[1].split('" rel=')[0].toString(), urlimage: TouteLesUrlImage[index].src.toString().replaceAll("-320x320", ""), titre: e.text.toString()), );
+        listearticle.add(ListeArticle(date: DateTime.now()/*datefinale[index]*/,url: urls[index].html!.split('href="')[1].split('" rel=')[0].toString(), urlimage: TouteLesUrlImage[index].src.toString().replaceAll("-320x320", ""), titre: e.text.toString()), );
         index =index+1;
       }
     }
 
 
     else{
-      listearticle.add(ListeArticle(url: "erreur", titre: "${TouteLesUrlImage.length} ${urls.length}", urlimage: "urlimage", date: ""));
+      listearticle.add(ListeArticle(url: "erreur", titre: "${TouteLesUrlImage.length} ${urls.length}", urlimage: "urlimage", date: DateTime.now()));
     }
 
 
 
     return listearticle;
   } catch (e) {
-    List<ListeArticle> listerreur= [ListeArticle(url: "erreur", titre: "${e}", urlimage: "urlimage", date: "")];
+    List<ListeArticle> listerreur= [ListeArticle(url: "erreur", titre: "${e}", urlimage: "urlimage", date: DateTime.now())];
     return listerreur;
   }
 
