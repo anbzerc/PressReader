@@ -113,7 +113,7 @@ class ListeArticleLayout extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(19, 22, 19, 0),
                     child: ClipRRect(
-                          child: Image.network(article.urlimage, filterQuality: FilterQuality.high),
+                          child: Image.network(article.urlimage, /*filterQuality: FilterQuality.high*/),
                           borderRadius: BorderRadius.circular(10),
                         ),
                   ),
