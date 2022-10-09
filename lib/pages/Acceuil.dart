@@ -14,7 +14,7 @@ class Acceuil extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          
+
         ],
       ),
     );

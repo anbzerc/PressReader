@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.2.2"
+  cached_network_image_builder:
+    dependency: "direct main"
+    description:
+      name: cached_network_image_builder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   cached_network_image_platform_interface:
     dependency: transitive
     description:

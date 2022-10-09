@@ -4,24 +4,32 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 import 'package:pressreaderflutter/article.dart';
 import 'package:chaleno/chaleno.dart' ;
 import 'package:web_scraper/web_scraper.dart';
 import 'package:pressreaderflutter/article.dart';
+
+
+
 class Opex360 extends StatelessWidget{
-  Opex360({super.key});
+  final String urlpourlaliste;
+  Opex360({super.key, required this.urlpourlaliste});
   late Future<List<ListeArticle>> futurelistearticle;
   late Future<Article> futureArticle;
 
+
   @override
   Widget build(BuildContext context) {
-    futurelistearticle = listeOpex360();
+
+    futurelistearticle = listeOpex360(urlpourlaliste);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Opex 360'),
       ),
       body: Center(
         child: FutureBuilder<List<ListeArticle>>(
+
             future: futurelistearticle,
             builder: (context, snapshot){
               if (snapshot.connectionState == ConnectionState.waiting){
@@ -39,553 +47,84 @@ class Opex360 extends StatelessWidget{
                   return Text('${snapshot.error} occurred');
                 } else if (snapshot.hasData) {
 
-                  return ListView(
-                      scrollDirection: Axis.vertical,
-                      children: [
-                              Column(
-                                children: [
-                                  GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder:
-                                          (context)=>  //ArticleLayout().articlelayout(opex360(snapshot.data![0].url) as Article))),
-                                          FutureBuilder<Article>(
-                                              future: opex360(snapshot.data![0].url),
-                                              builder: (context, snapshot){
-                                                if (snapshot.connectionState == ConnectionState.waiting){
-                                                  return Center(
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                                                      ],
-                                                    ),
-                                                  );
-                                                } else if (snapshot.connectionState == ConnectionState.done) {
-                                                  if (snapshot.hasError) {
-                                                    return Text('${snapshot.error} occurred');
-                                                  } else if (snapshot.hasData) {
-                                                    return
-                                                      Scaffold(
-                                                          appBar: AppBar(),
-                                                        body: SingleChildScrollView(
+                  return Column(
+                    children: [ Expanded(
 
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: snapshot.data!.length,
+
+                            itemBuilder: (context, index) {
+                              var urlimage=snapshot.data![index].urlimage;
+                              return GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context, MaterialPageRoute(builder: (context) =>
+                                    FutureBuilder<Article>(
+                                        future: opex360(snapshot.data![index].url),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment
+                                                    .center,
+                                                mainAxisAlignment: MainAxisAlignment
+                                                    .center,
+                                                children: const [
+                                                  CircularProgressIndicator(
+                                                    semanticsLabel: "Chargement...",),
+                                                ],
+                                              ),
+                                            );
+                                          } else if (snapshot.connectionState == ConnectionState.done) {
+                                            if (snapshot.hasError) {
+                                              return Text('${snapshot.error} occurred');
+                                            } else if (snapshot.hasData) {
+                                              return
+                                                Scaffold(
+                                                    appBar: AppBar(),
+                                                    body: SingleChildScrollView(
                                                         scrollDirection: Axis.vertical,
-                                                        child: Column(
-                                                          children: [
-
-                                                            ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                                                      ],
+                                                        child: Column(children: [
+                                                          ArticleLayout().articlelayout(Article(
+                                                              title: snapshot.data!.title,
+                                                              auteur: snapshot.data!.auteur,
+                                                              description: snapshot.data!.description,
+                                                              urlImage: urlimage,//urlimage,
+                                                              contenu: snapshot.data!.contenu,
+                                                              date: snapshot.data!.date))
+                                                        ],
 
                                                         )
-                                                        )
+                                                    )
 
-                                                      );
-                                                  }
-                                                  else {
-                                                    return const Text('Empty data');
-                                                  }
-                                                } else {
-                                                  return Text('State: ${snapshot.connectionState}');
-                                                }
-                                              }
-                                          ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![0])
-                                  ),
-
-
-                                  GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder:
-                                          (context)=>  //ArticleLayout().articlelayout(opex360(snapshot.data![0].url) as Article))),
-                                      FutureBuilder<Article>(
-                                          future: opex360(snapshot.data![1].url),
-                                          builder: (context, snapshot){
-                                            if (snapshot.connectionState == ConnectionState.waiting){
-                                              return Center(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (snapshot.connectionState == ConnectionState.done) {
-                                              if (snapshot.hasError) {
-                                                return Text('${snapshot.error} occurred');
-                                              } else if (snapshot.hasData) {
-                                                return
-                                                  Scaffold(
-                                                      appBar: AppBar(),
-                                                      body: SingleChildScrollView(
-
-                                                          scrollDirection: Axis.vertical,
-                                                          child: Column(
-                                                            children: [
-
-                                                              ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                                                            ],
-
-                                                          )
-                                                      )
-
-                                                  );
-                                              }
-                                              else {
-                                                return const Text('Empty data');
-                                              }
-                                            } else {
-                                              return Text('State: ${snapshot.connectionState}');
+                                                );
                                             }
-                                          }
-                                      ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![1])
-                                  ),
-
-
-                                  GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder:
-                                          (context)=>  //ArticleLayout().articlelayout(opex360(snapshot.data![0].url) as Article))),
-                                      FutureBuilder<Article>(
-                                          future: opex360(snapshot.data![2].url),
-                                          builder: (context, snapshot){
-                                            if (snapshot.connectionState == ConnectionState.waiting){
-                                              return Center(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (snapshot.connectionState == ConnectionState.done) {
-                                              if (snapshot.hasError) {
-                                                return Text('${snapshot.error} occurred');
-                                              } else if (snapshot.hasData) {
-                                                return
-                                                  Scaffold(
-                                                      appBar: AppBar(),
-                                                      body: SingleChildScrollView(
-
-                                                          scrollDirection: Axis.vertical,
-                                                          child: Column(
-                                                            children: [
-
-                                                              ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                                                            ],
-
-                                                          )
-                                                      )
-
-                                                  );
-                                              }
-                                              else {
-                                                return const Text('Empty data');
-                                              }
-                                            } else {
-                                              return Text('State: ${snapshot.connectionState}');
+                                            else {
+                                              return const Text('Empty data');
                                             }
+                                          } else {
+                                            return Text('State: ${snapshot
+                                                .connectionState}');
                                           }
-                                      ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![2])
-                                  ),
+                                        }
+                                    ))),
+                                child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index]),
+                                //Text(snapshot.data![index].urlimage),
+                              );
+                            }
+                        )
+                    ),
+                      OutlinedButton(
+                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> Opex360(urlpourlaliste: "http://www.opex360.com/page/2/",))),
+                          child: Text("2"))
 
 
-                                  GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder:
-                                          (context)=>  //ArticleLayout().articlelayout(opex360(snapshot.data![0].url) as Article))),
-                                      FutureBuilder<Article>(
-                                          future: opex360(snapshot.data![3].url),
-                                          builder: (context, snapshot){
-                                            if (snapshot.connectionState == ConnectionState.waiting){
-                                              return Center(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (snapshot.connectionState == ConnectionState.done) {
-                                              if (snapshot.hasError) {
-                                                return Text('${snapshot.error} occurred');
-                                              } else if (snapshot.hasData) {
-                                                return
-                                                  Scaffold(
-                                                      appBar: AppBar(),
-                                                      body: SingleChildScrollView(
-
-                                                          scrollDirection: Axis.vertical,
-                                                          child: Column(
-                                                            children: [
-
-                                                              ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                                                            ],
-
-                                                          )
-                                                      )
-
-                                                  );
-                                              }
-                                              else {
-                                                return const Text('Empty data');
-                                              }
-                                            } else {
-                                              return Text('State: ${snapshot.connectionState}');
-                                            }
-                                          }
-                                      ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![3])
-                                  )
-                                  ,
-                                  GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder:
-                                          (context)=>  //ArticleLayout().articlelayout(opex360(snapshot.data![0].url) as Article))),
-                                      FutureBuilder<Article>(
-                                          future: opex360(snapshot.data![4].url),
-                                          builder: (context, snapshot){
-                                            if (snapshot.connectionState == ConnectionState.waiting){
-                                              return Center(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (snapshot.connectionState == ConnectionState.done) {
-                                              if (snapshot.hasError) {
-                                                return Text('${snapshot.error} occurred');
-                                              } else if (snapshot.hasData) {
-                                                return
-                                                  Scaffold(
-                                                      appBar: AppBar(),
-                                                      body: SingleChildScrollView(
-
-                                                          scrollDirection: Axis.vertical,
-                                                          child: Column(
-                                                            children: [
-
-                                                              ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                                                            ],
-
-                                                          )
-                                                      )
-
-                                                  );
-                                              }
-                                              else {
-                                                return const Text('Empty data');
-                                              }
-                                            } else {
-                                              return Text('State: ${snapshot.connectionState}');
-                                            }
-                                          }
-                                      ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![4])
-                                  ),
-                                  GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder:
-                                          (context)=>  //ArticleLayout().articlelayout(opex360(snapshot.data![0].url) as Article))),
-                                      FutureBuilder<Article>(
-                                          future: opex360(snapshot.data![5].url),
-                                          builder: (context, snapshot){
-                                            if (snapshot.connectionState == ConnectionState.waiting){
-                                              return Center(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (snapshot.connectionState == ConnectionState.done) {
-                                              if (snapshot.hasError) {
-                                                return Text('${snapshot.error} occurred');
-                                              } else if (snapshot.hasData) {
-                                                return
-                                                  Scaffold(
-                                                    appBar: AppBar(),
-                                                      body: SingleChildScrollView(
-
-                                                          scrollDirection: Axis.vertical,
-                                                          child: Column(
-                                                            children: [
-
-                                                              ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                                                            ],
-
-                                                          )
-                                                      )
-
-                                                  );
-                                              }
-                                              else {
-                                                return const Text('Empty data');
-                                              }
-                                            } else {
-                                              return Text('State: ${snapshot.connectionState}');
-                                            }
-                                          }
-                                      ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![5])
-                                  ),
-                                  GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder:
-                                          (context)=>  //ArticleLayout().articlelayout(opex360(snapshot.data![0].url) as Article))),
-                                      FutureBuilder<Article>(
-                                          future: opex360(snapshot.data![6].url),
-                                          builder: (context, snapshot){
-                                            if (snapshot.connectionState == ConnectionState.waiting){
-                                              return Center(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (snapshot.connectionState == ConnectionState.done) {
-                                              if (snapshot.hasError) {
-                                                return Text('${snapshot.error} occurred');
-                                              } else if (snapshot.hasData) {
-                                                return
-                                                  Scaffold(
-                                                    appBar: AppBar(),
-                                                      body: SingleChildScrollView(
-
-                                                          scrollDirection: Axis.vertical,
-                                                          child: Column(
-                                                            children: [
-
-                                                              ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                                                            ],
-
-                                                          )
-                                                      )
-
-                                                  );
-                                              }
-                                              else {
-                                                return const Text('Empty data');
-                                              }
-                                            } else {
-                                              return Text('State: ${snapshot.connectionState}');
-                                            }
-                                          }
-                                      ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![6])
-                                  ),
-                                  GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder:
-                                          (context)=>  //ArticleLayout().articlelayout(opex360(snapshot.data![0].url) as Article))),
-                                      FutureBuilder<Article>(
-                                          future: opex360(snapshot.data![7].url),
-                                          builder: (context, snapshot){
-                                            if (snapshot.connectionState == ConnectionState.waiting){
-                                              return Center(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (snapshot.connectionState == ConnectionState.done) {
-                                              if (snapshot.hasError) {
-                                                return Text('${snapshot.error} occurred');
-                                              } else if (snapshot.hasData) {
-                                                return
-                                                  Scaffold(
-                                                    appBar: AppBar(),
-                                                      body: SingleChildScrollView(
-
-                                                          scrollDirection: Axis.vertical,
-                                                          child: Column(
-                                                            children: [
-
-                                                              ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                                                            ],
-
-                                                          )
-                                                      )
-
-                                                  );
-                                              }
-                                              else {
-                                                return const Text('Empty data');
-                                              }
-                                            } else {
-                                              return Text('State: ${snapshot.connectionState}');
-                                            }
-                                          }
-                                      ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![7])
-                                  ),
-                                  GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder:
-                                          (context)=>  //ArticleLayout().articlelayout(opex360(snapshot.data![0].url) as Article))),
-                                      FutureBuilder<Article>(
-                                          future: opex360(snapshot.data![8].url),
-                                          builder: (context, snapshot){
-                                            if (snapshot.connectionState == ConnectionState.waiting){
-                                              return Center(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (snapshot.connectionState == ConnectionState.done) {
-                                              if (snapshot.hasError) {
-                                                return Text('${snapshot.error} occurred');
-                                              } else if (snapshot.hasData) {
-                                                return
-                                                  Scaffold(
-                                                    appBar: AppBar(),
-                                                      body: SingleChildScrollView(
-
-                                                          scrollDirection: Axis.vertical,
-                                                          child: Column(
-                                                            children: [
-
-                                                              ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                                                            ],
-
-                                                          )
-                                                      )
-
-                                                  );
-                                              }
-                                              else {
-                                                return const Text('Empty data');
-                                              }
-                                            } else {
-                                              return Text('State: ${snapshot.connectionState}');
-                                            }
-                                          }
-                                      ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![8])
-                                  ),
-                                  GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder:
-                                          (context)=>  //ArticleLayout().articlelayout(opex360(snapshot.data![0].url) as Article))),
-                                      FutureBuilder<Article>(
-                                          future: opex360(snapshot.data![9].url),
-                                          builder: (context, snapshot){
-                                            if (snapshot.connectionState == ConnectionState.waiting){
-                                              return Center(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (snapshot.connectionState == ConnectionState.done) {
-                                              if (snapshot.hasError) {
-                                                return Text('${snapshot.error} occurred');
-                                              } else if (snapshot.hasData) {
-                                                return
-                                                  Scaffold(
-                                                    appBar: AppBar(),
-                                                      body: SingleChildScrollView(
-
-                                                          scrollDirection: Axis.vertical,
-                                                          child: Column(
-                                                            children: [
-
-                                                              ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                                                            ],
-
-                                                          )
-                                                      )
-
-                                                  );
-                                              }
-                                              else {
-                                                return const Text('Empty data');
-                                              }
-                                            } else {
-                                              return Text('State: ${snapshot.connectionState}');
-                                            }
-                                          }
-                                      ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![9])
-                                  ),
-
-                                    GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder:
-                                          (context)=>  //ArticleLayout().articlelayout(opex360(snapshot.data![0].url) as Article))),
-                                      FutureBuilder<Article>(
-                                          future: opex360(snapshot.data![10].url),
-                                          builder: (context, snapshot){
-                                            if (snapshot.connectionState == ConnectionState.waiting){
-                                              return Center(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (snapshot.connectionState == ConnectionState.done) {
-                                              if (snapshot.hasError) {
-                                                return Text('${snapshot.error} occurred');
-                                              } else if (snapshot.hasData) {
-                                                return
-                                                  Scaffold(
-                                                      body: SingleChildScrollView(
-
-                                                          scrollDirection: Axis.vertical,
-                                                          child: Column(
-                                                            children: [
-
-                                                              ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                                                            ],
-
-                                                          )
-                                                      )
-
-                                                  );
-                                              }
-                                              else {
-                                                return const Text('Empty data');
-                                              }
-                                            } else {
-                                              return Text('State: ${snapshot.connectionState}');
-                                            }
-                                          }
-                                      ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![10])
-                                  ),
 
 
-                                ],
-                              ),
-
-                        ]
-                    );
+                    ],
+                  );
 
 
                 }
@@ -615,12 +154,12 @@ Future<Article> opex360(url) async {
     var auteurtmp  = response?.getElementsByClassName("post-byline");
     //on fait une boucle pour le ca ou il y a plusieurs auteurs
     if (auteurtmp!.isEmpty == false){auteurtmp.forEach((element) { auteurfinal = auteurfinal + element.text.toString().replaceAll("par", "Par "); });}
-      else {auteurfinal = "";}
+    else {auteurfinal = "";}
 
     // il n'y a pas de description pour les articles d'Opex360  mais l'Objet Article a un attribut description, donc on lui en renvoie une nulle
     var description = "";
-      /*TODO recuperer les tags de l'article*/
-      //la date est recupérée en meme temps que l'auteur
+    /*TODO recuperer les tags de l'article*/
+    //la date est recupérée en meme temps que l'auteur
     var date = "";
     var imageurlfinal = response!.getElementsByTagName("img")!.elementAt(1).src.toString();
 
@@ -645,7 +184,7 @@ Future<Article> opex360(url) async {
                 "&nbsp;", " ").replaceAll("&shy;", "").replaceAll(
                 "&amp;", "&").replaceAll(
                 '<div class="swp-content-locator"></div>', "");
-        }
+          }
         }
         else {
           contenufinal = contenufinal +
@@ -672,29 +211,40 @@ Future<Article> opex360(url) async {
 
 }
 
-Future<List<ListeArticle>> listeOpex360() async {
+Future<List<ListeArticle>> listeOpex360(url) async {
 //Getting the response from the targeted url
-  final response = await Chaleno().load("http://www.opex360.com/");
+  final response = await Chaleno().load(url);
 /* TODO opex360 from xml*/
   try {
     //Scrape tout les articles
-    
+
     //on recupere les urls de tout les articles de la page
     var urls = response?.getElementsByClassName("post-title");
 
-    //on recupere l'url de l'image de l'article featured
-    var urlimagesfeatured = response?.getElementsByClassName("attachment-kontrast-large size-kontrast-large wp-post-image");
+    var TouteLesUrlImage = List<String>.empty(growable: true);
 
+    if(url=="http://www.opex360.com" ){
+
+      //on recupere l'url de l'image de l'article featured
+      var urlimagesfeatured = response?.getElementsByClassName("attachment-kontrast-large size-kontrast-large wp-post-image");
+
+      //on rajoute l'url de l'image featured
+      if(urlimagesfeatured!=null){
+        TouteLesUrlImage.add(urlimagesfeatured.first.src.toString());}
+      else {
+        TouteLesUrlImage.add("https://as2.ftcdn.net/v2/jpg/01/94/81/49/1000_F_194814992_UWnjXEu2WbIZefe9ZOAArxFRpVBG2u0M.jpg");
+      }
+
+    }
     //toute les url images a part le featured
     var UrlImagesSaufFeatured = response?.getElementsByClassName("attachment-kontrast-standard size-kontrast-standard wp-post-image");
 
 
-    var TouteLesUrlImage = List<Result>.empty(growable: true);
-    //on rajoute l'url de l'image featured
-    TouteLesUrlImage.add(urlimagesfeatured!.first);
+
+
     // on met toute les urls images
     for(var element in UrlImagesSaufFeatured!){
-      TouteLesUrlImage.add(element);
+      TouteLesUrlImage.add(element.src.toString());
     }
 
 
@@ -716,7 +266,7 @@ Future<List<ListeArticle>> listeOpex360() async {
     if(TouteLesUrlImage.length == urls!.length){
       for(var e in urls)
       {
-        listearticle.add(ListeArticle(date: DateTime.now()/*datefinale[index]*/,url: urls[index].html!.split('href="')[1].split('" rel=')[0].toString(), urlimage: TouteLesUrlImage[index].src.toString().replaceAll("-320x320", ""), titre: e.text.toString()), );
+        listearticle.add(ListeArticle(date: DateTime.now()/*datefinale[index]*/,url: urls[index].html!.split('href="')[1].split('" rel=')[0].toString(), urlimage: TouteLesUrlImage[index].replaceAll("-320x320", ""), titre: e.text.toString()), );
         index =index+1;
       }
     }
@@ -739,5 +289,5 @@ Future<List<ListeArticle>> listeOpex360() async {
 }
 
 int nombrearticle(List<Result> resultats){
-return resultats.length;
+  return resultats.length;
 }

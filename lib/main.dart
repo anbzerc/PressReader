@@ -42,7 +42,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     futureArticle = opex360("http://www.opex360.com/2022/09/30/la-turquie-confirme-avoir-des-discussions-pour-se-procurer-des-avions-de-combat-eurofighter-typhoon/");
-    futurelistearticle = listeOpex360();
+    futurelistearticle = listeOpex360("http://www.opex360.com");
     return Scaffold(
       appBar: AppBar(
         title: Text("PressReader", style: TextStyle(fontFamily: "Caveat", fontSize: 25),),

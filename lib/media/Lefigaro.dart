@@ -1,15 +1,12 @@
-import 'package:al_downloader/al_downloader.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:html/parser.dart' as parser;
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pressreaderflutter/article.dart';
 import 'package:chaleno/chaleno.dart' ;
-import 'package:webfeed/domain/atom_feed.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 import 'package:webfeed/domain/rss_item.dart';
+import 'package:pressreaderflutter/services/HtmlParser.dart';
 
 class LeFigaro extends StatelessWidget {
   LeFigaro({super.key}) ;
@@ -18,7 +15,7 @@ class LeFigaro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    futurelistearticle1 = listeFigaro("https://www.lefigaro.fr/rss/figaro_actualites.xml");
+    futurelistearticle1 = listeFigaro("https://www.lefigaro.fr/rss/figaro_flash-actu.xml");
     return Scaffold(
         appBar: AppBar(title: const Text("Le Figaro")),
         body: FutureBuilder(
@@ -47,6 +44,7 @@ class LeFigaro extends StatelessWidget {
                       itemCount: snapshot.data!.length,
 
                       itemBuilder: (context, index) {
+                        var urlimage=snapshot.data![index].urlimage;
                         return GestureDetector(
                           onTap: () => Navigator.push(
                               context, MaterialPageRoute(builder: (context) =>
@@ -67,11 +65,9 @@ class LeFigaro extends StatelessWidget {
                                           ],
                                         ),
                                       );
-                                    } else if (snapshot.connectionState ==
-                                        ConnectionState.done) {
+                                    } else if (snapshot.connectionState == ConnectionState.done) {
                                       if (snapshot.hasError) {
-                                        return Text(
-                                            '${snapshot.error} occurred');
+                                        return Text('${snapshot.error} occurred');
                                       } else if (snapshot.hasData) {
                                         return
                                           Scaffold(
@@ -83,7 +79,7 @@ class LeFigaro extends StatelessWidget {
                                                               title: snapshot.data!.title,
                                                               auteur: snapshot.data!.auteur,
                                                               description: snapshot.data!.description,
-                                                              urlImage: snapshot.data!.urlImage,
+                                                              urlImage: urlimage,//urlimage,
                                                               contenu: snapshot.data!.contenu,
                                                               date: snapshot.data!.date))
                                                     ],
@@ -102,7 +98,8 @@ class LeFigaro extends StatelessWidget {
                                     }
                                   }
                               ))),
-                          child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index]),// Text(snapshot.data![index].titre),
+                          child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index]),
+                          //Text(snapshot.data![index].urlimage),
                         );
                       })),
 
@@ -135,22 +132,26 @@ Future<Article> LeFigaroArticle(url) async {
   var document = response?.html;
   try {
     //Scraping the first article title
-    var titre = response?.getElementsByClassName("fig-standfirst")!.first.text!.trim();
-    var description = response?.getElementsByClassName("fig-standfirst").first.text!.trim();
+    var titre = document!.split("<title>")[1].split("</title>")[0].toString();//.first.text!.toString();
+    var description = document.split('<meta name="description" content="')[1].split('">')[0].toString();
     var imageurl = response?.
     getElementsByClassName("fig-media fig-media--type-photo fig-media__content-main")
         .first.attr("srcset")!
-        .trim().split(" ").first;
-    var contenufinal = "";
+        .toString().split(" ").first;
+    //var contenufinal = "";
     var auteurfinal = "Par ";
-    var content = response?.getElementsByClassName("fig-paragraph");
-    var content1 = content!.forEach((elements) => {
-      contenufinal = contenufinal + elements.text.toString()
-    });
+    //var content = response?.getElementsByClassName("fig-paragraph");
+    //var content1 = content!.forEach((elements) => {
+    //  contenufinal = contenufinal + elements.text.toString()
+    //});
+    var parser = HtmlParser(document: document);
+    var contenufinal = parser.paragraph();
 
-    var auteurtmp  = response?.getElementsByClassName("fig-content-metas__author");
-    if (auteurtmp!.isEmpty == false){var auteur1 = auteurtmp.forEach((element) { auteurfinal = auteurfinal + element.text.toString() + ", "; });}
+    var auteurtmp  = response?.getElementsByClassName("fig-content-metas__authors");
+    if (auteurtmp!.isEmpty == false){var auteur1 = auteurtmp.forEach((element) { auteurfinal = auteurfinal + element.text.toString().replaceAll("Par", "") + ", "; });}
     else {auteurfinal = "";}
+    auteurfinal = auteurfinal.replaceAll("  ", "");
+
     var date = response?.getElementsByClassName("fig-content-metas__pub-maj-date").first.text.toString();
     return Article(title: titre.toString(), auteur: auteurfinal.toString(), description: description.toString(), urlImage: imageurl.toString(), contenu: contenufinal, date: date.toString()) ;
   } catch (e) {
@@ -170,11 +171,16 @@ Future<List<ListeArticle>> listeFigaro(url) async {
     final feed = RssFeed.parse(response.data);
 
     for(RssItem rssitem in feed.items!){
-
+      try {
       if(rssitem.link != null){
+
         var urlimage = rssitem.media!.contents!.first.url.toString();  //String().split('" width')[0].replaceAll('url="', "").replaceAll('"', "");
+        if(urlimage.isEmpty){urlimage="";}
         var date = rssitem.pubDate as DateTime; //"${rssitem.pubDate?.day.toString()} ${rssitem.pubDate?.month.toString()} ${rssitem.pubDate?.year.toString()} " ;
         liste.add(ListeArticle(url: rssitem.link.toString(), titre: rssitem.title.toString(), urlimage: urlimage, date: date));
+      }
+      } catch(e){
+
       }
 
     }

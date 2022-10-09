@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pressreaderflutter/media/Lefigaro.dart';
 import 'package:pressreaderflutter/media/opex360.dart';
@@ -26,7 +25,7 @@ class Journaux extends StatelessWidget {
                   width: 330,
                   height: 190,
                   child:GestureDetector(
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> Opex360())),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> Opex360(urlpourlaliste: "http://www.opex360.com",))),
                     child: Card(
                         semanticContainer: true,
                         clipBehavior: Clip.antiAliasWithSaveLayer,
