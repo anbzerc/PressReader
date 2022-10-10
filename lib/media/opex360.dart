@@ -7,14 +7,38 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:pressreaderflutter/article.dart';
 import 'package:chaleno/chaleno.dart' ;
+
 import 'package:web_scraper/web_scraper.dart';
 import 'package:pressreaderflutter/article.dart';
 
+const List<Widget> FirstPageSelected = <Widget>[
+  Text('   1   '),
+  Text('Suivante >')
+];
 
+List<Widget> pageSelected(String index) {
+  return <Widget>[
+  const Text(' < Précedente '),
+  Text(index),
+  const Text(' Suivante > ')
+];
+}
 
-class Opex360 extends StatelessWidget{
+final List<bool> _FirstPageSelected = <bool>[true, false];
+final List<bool> _PageSelected = <bool>[false, true, false];
+
+class Opex360State extends StatefulWidget {
+  const Opex360State({super.key, required this.urlpourlaliste});
+
   final String urlpourlaliste;
-  Opex360({super.key, required this.urlpourlaliste});
+
+  @override
+  State<Opex360State> createState() => _Opex360(urlpourlaliste: urlpourlaliste,);
+}
+
+class _Opex360 extends State<Opex360State>{
+  final String urlpourlaliste;
+  _Opex360({required this.urlpourlaliste});
   late Future<List<ListeArticle>> futurelistearticle;
   late Future<Article> futureArticle;
 
@@ -23,11 +47,7 @@ class Opex360 extends StatelessWidget{
   Widget build(BuildContext context) {
 
     futurelistearticle = listeOpex360(urlpourlaliste);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Opex 360'),
-      ),
-      body: Center(
+    return Center(
         child: FutureBuilder<List<ListeArticle>>(
 
             future: futurelistearticle,
@@ -51,7 +71,8 @@ class Opex360 extends StatelessWidget{
                     children: [ Expanded(
 
                         child: ListView.builder(
-                            shrinkWrap: true,
+
+                            //shrinkWrap: true,
                             scrollDirection: Axis.vertical,
                             itemCount: snapshot.data!.length,
 
@@ -116,10 +137,39 @@ class Opex360 extends StatelessWidget{
                             }
                         )
                     ),
-                      OutlinedButton(
-                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> Opex360(urlpourlaliste: "http://www.opex360.com/page/2/",))),
-                          child: Text("2"))
+                      if(urlpourlaliste=="http://www.opex360.com")...[
+                      ToggleButtons(
+                          borderRadius: const BorderRadius.all(Radius.circular(30)),
+                          isSelected: _FirstPageSelected,
+                          onPressed: (int index){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                Opex360State(urlpourlaliste: "http://www.opex360.com/page/2/",)));
+                          },
+                          children: FirstPageSelected)
+                      ]else...[
+                        ToggleButtons(
+                            borderRadius: const BorderRadius.all(Radius.circular(30)),
+                            isSelected: _PageSelected,
+                            onPressed: (int index){
+                              if(index==0){
+                                if (int.parse(urlpourlaliste.split("page/")[1].replaceAll("/", ""))!=2) {
+                                  var indexpage = int.parse(urlpourlaliste.split("page/")[1].replaceAll("/", ""));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                      Scaffold(body: Opex360State(urlpourlaliste: "http://www.opex360.com/page/${indexpage-1}/",))));
+                                }else {
+                                  var indexpage = int.parse(urlpourlaliste.split("page/")[1].replaceAll("/", ""));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                      Opex360State(urlpourlaliste: "http://www.opex360.com/",)));
+                                }
+                              }else if(index == 2 ){
+                                var indexpage = int.parse(urlpourlaliste.split("page/")[1].replaceAll("/", ""));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                    Opex360State(urlpourlaliste: "http://www.opex360.com/page/${indexpage+1}/",)));
+                              }
+                            },
+                            children: pageSelected(urlpourlaliste.split("page/")[1].replaceAll("/", "")))
 
+                      ]
 
 
 
@@ -136,8 +186,7 @@ class Opex360 extends StatelessWidget{
               }
             }
         ),
-      ),
-    );
+      );
   }
 }
 Future<Article> opex360(url) async {
@@ -190,15 +239,15 @@ Future<Article> opex360(url) async {
           contenufinal = contenufinal +
               element.toString().replaceAll("</p>", "\n").replaceAll(
                   "&nbsp;", " ").replaceAll("&shy;", "").replaceAll(
-                  "&amp;", "&").replaceAll(
-                  '<div class="swp-content-locator"></div>', "");
+                  "&amp;", "&").replaceAll('<div class="swp-content-locator"></div>', "")
+                  .replaceAll('<div class="swp-content-locator', "");
         }
       }
       compteur=compteur+1;
     }
     //content.forEach((elements) => {contenufinal = "$contenufinal${elements.text}".replaceAll("Partagez", " ").replaceAll("Tweetez", "").replaceAll("Enregistrer", " ").split("   ")[1].replaceAll("  ", "\n")});
     contenufinal = contenufinal.replaceAll("[", "(");
-    contenufinal = contenufinal.replaceAll("]", ")");
+    contenufinal = contenufinal.replaceAll("]", ")").replaceAll('<div class="swp-content-locator', "");
     /* TODO */
     /*if(contenufinal.contains("<a ")){
       contenufinal = contenufinal.
@@ -266,7 +315,7 @@ Future<List<ListeArticle>> listeOpex360(url) async {
     if(TouteLesUrlImage.length == urls!.length){
       for(var e in urls)
       {
-        listearticle.add(ListeArticle(date: DateTime.now()/*datefinale[index]*/,url: urls[index].html!.split('href="')[1].split('" rel=')[0].toString(), urlimage: TouteLesUrlImage[index].replaceAll("-320x320", ""), titre: e.text.toString()), );
+        listearticle.add(ListeArticle(date: DateTime.now()/*datefinale[index]*/,url: urls[index].html!.split('href="')[1].split('" rel=')[0].toString(), urlimage: TouteLesUrlImage[index].replaceAll("-320x320", "").replaceAll("-320x315", ""), titre: e.text.toString().replaceAll(e.text![1], "")), );
         index =index+1;
       }
     }

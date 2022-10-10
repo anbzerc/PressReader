@@ -25,7 +25,11 @@ class Journaux extends StatelessWidget {
                   width: 330,
                   height: 190,
                   child:GestureDetector(
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> Opex360(urlpourlaliste: "http://www.opex360.com",))),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> Scaffold(
+                        appBar: AppBar(
+                          title: const Text('Opex 360'),
+                        ),
+                        body: Opex360State(urlpourlaliste: "http://www.opex360.com/page/2/",)))),
                     child: Card(
                         semanticContainer: true,
                         clipBehavior: Clip.antiAliasWithSaveLayer,

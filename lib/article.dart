@@ -154,6 +154,7 @@ class ListeArticleLayout extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+
         if (article.urlimage.startsWith("http")==true)...[
 
           Padding(
