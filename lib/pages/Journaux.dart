@@ -29,7 +29,7 @@ class Journaux extends StatelessWidget {
                         appBar: AppBar(
                           title: const Text('Opex 360'),
                         ),
-                        body: Opex360State(urlpourlaliste: "http://www.opex360.com/page/2/",)))),
+                        body: Opex360State(urlpourlaliste: "http://www.opex360.com",)))),
                     child: Card(
                         semanticContainer: true,
                         clipBehavior: Clip.antiAliasWithSaveLayer,

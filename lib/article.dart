@@ -26,7 +26,7 @@ class ListeArticle{
     };
   }
 
-  factory   ListeArticle.fromMap(Map<String, dynamic> map) => ListeArticle(
+  factory ListeArticle.fromMap(Map<String, dynamic> map) => ListeArticle(
       url: map['url'], titre: map['titre'], urlimage: map['urlimage'], date: map['date']);
 
 }
@@ -37,6 +37,7 @@ class Article {
   final String urlImage;
   final String contenu;
   final String date;
+  final String url;
   bool isPremium;
 
   Article({
@@ -46,8 +47,23 @@ class Article {
     required this.urlImage,
     required this.contenu,
     required this.date,
+    required this.url,
     this.isPremium = false,
   });
+
+  Map<String, dynamic> toMap(){
+    return {
+      'title' : title,
+      'auteur' : auteur,
+      'description' : description,
+      'urlimage' : urlImage,
+      'contenu' : contenu,
+      'date' : date,
+    };
+  }
+
+  factory Article.fromMap(Map<String, dynamic> map) => Article(
+      url: map['url'],auteur: map['auteur'], contenu: map['contenu'], description: map['description'], title: map['title'], urlImage: map['urlimage'], date: map['date']);
 
 }
 

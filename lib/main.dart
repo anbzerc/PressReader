@@ -98,7 +98,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                 } else if (snapshot.hasData) {
                   return Column(
                     children: [
-                        ArticleLayout().articlelayout(Article(title: snapshot.data!.title, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
+                        ArticleLayout().articlelayout(Article(title: snapshot.data!.title,url: snapshot.data!.url, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
                     ],
                   );
 

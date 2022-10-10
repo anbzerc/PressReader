@@ -77,6 +77,7 @@ class LeFigaro extends StatelessWidget {
                                                   child: Column(children: [
                                                       ArticleLayout().articlelayout(Article(
                                                               title: snapshot.data!.title,
+                                                              url: snapshot.data!.url,
                                                               auteur: snapshot.data!.auteur,
                                                               description: snapshot.data!.description,
                                                               urlImage: urlimage,//urlimage,
@@ -125,37 +126,30 @@ class LeFigaro extends StatelessWidget {
 }
 
 
-Future<Article> LeFigaroArticle(url) async {
+Future<Article> LeFigaroArticle(urlarticle) async {
 //Getting the response from the targeted url
-  final response = await Chaleno().load(url);
+  final response = await Chaleno().load(urlarticle);
 
   var document = response?.html;
   try {
+    var parser = HtmlParser(document: document.toString());
     //Scraping the first article title
-    var titre = document!.split("<title>")[1].split("</title>")[0].toString();//.first.text!.toString();
-    var description = document.split('<meta name="description" content="')[1].split('">')[0].toString();
-    var imageurl = response?.
-    getElementsByClassName("fig-media fig-media--type-photo fig-media__content-main")
-        .first.attr("srcset")!
-        .toString().split(" ").first;
+    var titre = parser.title();//.first.text!.toString();
+    var description = parser.description();
+    var imageurl = parser.urlimage();
     //var contenufinal = "";
     var auteurfinal = "Par ";
-    //var content = response?.getElementsByClassName("fig-paragraph");
-    //var content1 = content!.forEach((elements) => {
-    //  contenufinal = contenufinal + elements.text.toString()
-    //});
-    var parser = HtmlParser(document: document);
     var contenufinal = parser.paragraph();
 
     var auteurtmp  = response?.getElementsByClassName("fig-content-metas__authors");
-    if (auteurtmp!.isEmpty == false){var auteur1 = auteurtmp.forEach((element) { auteurfinal = auteurfinal + element.text.toString().replaceAll("Par", "") + ", "; });}
+    if (auteurtmp!.isEmpty == false){auteurtmp.forEach((element) { auteurfinal = auteurfinal + element.text.toString().replaceAll("Par", "") + ", "; });}
     else {auteurfinal = "";}
     auteurfinal = auteurfinal.replaceAll("  ", "");
 
     var date = response?.getElementsByClassName("fig-content-metas__pub-maj-date").first.text.toString();
-    return Article(title: titre.toString(), auteur: auteurfinal.toString(), description: description.toString(), urlImage: imageurl.toString(), contenu: contenufinal, date: date.toString()) ;
+    return Article(title: titre.toString(),url: urlarticle, auteur: auteurfinal.toString(), description: description.toString(), urlImage: imageurl.toString(), contenu: contenufinal, date: date.toString()) ;
   } catch (e) {
-    return Article(title: 'Une erreur " $e " \n est survenue, veuillez réessayer"', auteur:"" , description: "", urlImage: "https://as2.ftcdn.net/v2/jpg/01/94/81/49/1000_F_194814992_UWnjXEu2WbIZefe9ZOAArxFRpVBG2u0M.jpg", contenu: "", date: "");
+    return Article(title: 'Une erreur " $e " \n est survenue, veuillez réessayer"',url: urlarticle, auteur:"" , description: "", urlImage: "https://as2.ftcdn.net/v2/jpg/01/94/81/49/1000_F_194814992_UWnjXEu2WbIZefe9ZOAArxFRpVBG2u0M.jpg", contenu: "", date: "");
   }
 
 }

@@ -110,6 +110,7 @@ class _Opex360 extends State<Opex360State>{
                                                         child: Column(children: [
                                                           ArticleLayout().articlelayout(Article(
                                                               title: snapshot.data!.title,
+                                                              url: snapshot.data!.url,
                                                               auteur: snapshot.data!.auteur,
                                                               description: snapshot.data!.description,
                                                               urlImage: urlimage,//urlimage,
@@ -137,7 +138,8 @@ class _Opex360 extends State<Opex360State>{
                             }
                         )
                     ),
-                      if(urlpourlaliste=="http://www.opex360.com")...[
+                      /* TODO faire la pagination*/
+                      /*if(urlpourlaliste=="http://www.opex360.com")...[
                       ToggleButtons(
                           borderRadius: const BorderRadius.all(Radius.circular(30)),
                           isSelected: _FirstPageSelected,
@@ -169,7 +171,7 @@ class _Opex360 extends State<Opex360State>{
                             },
                             children: pageSelected(urlpourlaliste.split("page/")[1].replaceAll("/", "")))
 
-                      ]
+                      ]*/
 
 
 
@@ -189,9 +191,9 @@ class _Opex360 extends State<Opex360State>{
       );
   }
 }
-Future<Article> opex360(url) async {
+Future<Article> opex360(urlarticle) async {
 //Getting the response from the targeted url
-  final response = await Chaleno().load(url);
+  final response = await Chaleno().load(urlarticle);
 
   var document = response?.html;
   try {
@@ -253,9 +255,9 @@ Future<Article> opex360(url) async {
       contenufinal = contenufinal.
   }*/
 
-    return Article(title: titre.toString(), auteur: auteurfinal.toString(), description: description.toString(), urlImage: imageurlfinal.toString(), contenu: contenufinal.replaceAll("</div>", "").replaceAll("&nbsp;", " "), date: '') ;
+    return Article(title: titre.toString(),url: urlarticle, auteur: auteurfinal.toString(), description: description.toString(), urlImage: imageurlfinal.toString(), contenu: contenufinal.replaceAll("</div>", "").replaceAll("&nbsp;", " "), date: '') ;
   } catch (e) {
-    return Article(title: 'Une erreur " $e " \n est survenue, veuillez réessayer"', auteur:"" , description: "", urlImage: "https://as2.ftcdn.net/v2/jpg/01/94/81/49/1000_F_194814992_UWnjXEu2WbIZefe9ZOAArxFRpVBG2u0M.jpg", contenu: "", date: "");
+    return Article(title: 'Une erreur " $e " \n est survenue, veuillez réessayer"',url: urlarticle, auteur:"" , description: "", urlImage: "https://as2.ftcdn.net/v2/jpg/01/94/81/49/1000_F_194814992_UWnjXEu2WbIZefe9ZOAArxFRpVBG2u0M.jpg", contenu: "", date: "");
   }
 
 }
