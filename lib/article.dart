@@ -10,6 +10,7 @@ class ListeArticle{
   final String urlimage;
   final DateTime date;
 
+
   const ListeArticle({
     required this.url,
     required this.titre,
@@ -84,6 +85,7 @@ class ArticleLayout extends StatelessWidget {
 
         if  (article.description == "")...[
           CachedNetworkImage(
+
             filterQuality: FilterQuality.high,
             imageUrl: article.urlImage,
             progressIndicatorBuilder: (context, url, downloadProgress) =>
@@ -97,19 +99,19 @@ class ArticleLayout extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Text("${article.auteur}", style: TextStyle(fontSize: 19, fontFamily: "titre"),textAlign: TextAlign.start, ),
+            child: Text("${article.auteur}", style: const TextStyle(fontSize: 19, fontFamily: "titre"),textAlign: TextAlign.start, ),
           ),
 
           if(article.urlImage.contains("opex360")==false)...[
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text(article.date, style: TextStyle(fontSize: 22, fontFamily: "titre"), textAlign: TextAlign.start, ),
+              child: Text(article.date, style: const TextStyle(fontSize: 22, fontFamily: "titre"), textAlign: TextAlign.start, ),
             )
           ]
           ,
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-            child: Text(article.contenu, style: TextStyle(fontSize: 23, fontFamily: "texte")),
+            child: Text(article.contenu, style: const TextStyle(fontSize: 23, fontFamily: "texte")),
           )
 
         ] else ... [
@@ -125,27 +127,27 @@ class ArticleLayout extends StatelessWidget {
 
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Text(article.title, style: TextStyle(fontSize: 27, fontFamily: "titre" )),
+            child: Text(article.title, style: const TextStyle(fontSize: 27, fontFamily: "titre" )),
           ),
           Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text(article.description, style: TextStyle(fontSize: 24, fontFamily: "texte"))
+              child: Text(article.description, style: const TextStyle(fontSize: 24, fontFamily: "texte"))
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Text("${article.auteur}", style: TextStyle(fontSize: 19, fontFamily: "titre"),textAlign: TextAlign.start, ),
+            child: Text("${article.auteur}", style: const TextStyle(fontSize: 19, fontFamily: "titre"),textAlign: TextAlign.start, ),
           ),
 
           if(article.urlImage.contains("opex360")==false)...[
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text(article.date, style: TextStyle(fontSize: 19, fontFamily: "titre"), textAlign: TextAlign.start, ),
+              child: Text(article.date, style: const TextStyle(fontSize: 19, fontFamily: "titre"), textAlign: TextAlign.start, ),
             )
           ]
           ,
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-            child: Text(article.contenu, style: TextStyle(fontSize: 23, fontFamily: "texte")),
+            child: Text(article.contenu, style: const TextStyle(fontSize: 23, fontFamily: "texte")),
           )
         ]
       ],
@@ -165,13 +167,13 @@ class ListeArticleLayout extends StatelessWidget {
   }
 
   @override
-  Widget ListViewArticleLayout(ListeArticle article){
+  Widget ListViewArticleLayout(ListeArticle ListeArticle){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
 
-        if (article.urlimage.startsWith("http")==true)...[
+        if (ListeArticle.urlimage.startsWith("http")==true)...[
 
           Padding(
             padding: const EdgeInsets.fromLTRB(19, 22, 19, 0),
@@ -179,29 +181,35 @@ class ListeArticleLayout extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
                 filterQuality: FilterQuality.high,
-                imageUrl: article.urlimage,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                imageUrl: ListeArticle.urlimage,
                 errorWidget: (context, url, error) => Image.asset("assets/indisponible"),
-                /*filterQuality: FilterQuality.high*/),
+                ),
             ),
           )
         ],
-        Padding(
-          padding: const EdgeInsets.fromLTRB(19, 10, 19, 0),
-          child: Image.asset("assets/zone-militaire.png", width: 96.66666666666667, height: 23.333333333333332, filterQuality: FilterQuality.high,),
-        ),
+        if(ListeArticle.url.contains("figaro")==true)...{
+          Padding(
+            padding: const EdgeInsets.fromLTRB(19, 8, 19, 3),
+            child: Image.asset("assets/le-figaro.png", width: 96.66666666666667, height: 23.333333333333332, filterQuality: FilterQuality.high,),
+          ),
+        }else if(ListeArticle.url.contains("opex360")==true)...{
+          Padding(
+            padding: const EdgeInsets.fromLTRB(19, 10, 19, 0),
+            child: Image.asset("assets/zone-militaire.png", width: 96.66666666666667, height: 23.333333333333332, filterQuality: FilterQuality.high,),
+          ),
+        },
+
 
         Padding(
           padding: const EdgeInsets.fromLTRB(19, 0, 19, 0),
-          child: Text(article.titre, style: TextStyle(fontSize: 17, fontFamily: "sansserif"), textAlign: TextAlign.left, ),
+          child: Text(ListeArticle.titre, style: TextStyle(fontSize: 17, fontFamily: "sansserif"), textAlign: TextAlign.left, ),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(19, 0, 19, 0),
-          child: Text(article.date.toString(), style: TextStyle(fontSize: 12, fontFamily: "sansserif"), textAlign: TextAlign.start, ),
+          child: Text(ListeArticle.date.toString(), style: TextStyle(fontSize: 12, fontFamily: "sansserif"), textAlign: TextAlign.start, ),
         ),
         const Padding(
-          padding: EdgeInsets.fromLTRB(19, 10, 19, 0),
+          padding: EdgeInsets.fromLTRB(16, 10, 16, 0),
           child: Divider(
             color: Colors.grey,
 

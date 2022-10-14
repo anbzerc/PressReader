@@ -71,8 +71,6 @@ class _Opex360 extends State<Opex360State>{
                     children: [ Expanded(
 
                         child: ListView.builder(
-
-                            //shrinkWrap: true,
                             scrollDirection: Axis.vertical,
                             itemCount: snapshot.data!.length,
 
@@ -116,7 +114,7 @@ class _Opex360 extends State<Opex360State>{
                                                               urlImage: urlimage,//urlimage,
                                                               contenu: snapshot.data!.contenu,
                                                               date: snapshot.data!.date))
-                                                        ],
+                                                        ] ,
 
                                                         )
                                                     )
@@ -317,7 +315,12 @@ Future<List<ListeArticle>> listeOpex360(url) async {
     if(TouteLesUrlImage.length == urls!.length){
       for(var e in urls)
       {
-        listearticle.add(ListeArticle(date: DateTime.now()/*datefinale[index]*/,url: urls[index].html!.split('href="')[1].split('" rel=')[0].toString(), urlimage: TouteLesUrlImage[index].replaceAll("-320x320", "").replaceAll("-320x315", ""), titre: e.text.toString().replaceAll(e.text![1], "")), );
+        listearticle.add(ListeArticle(
+            date: DateTime.now()/*datefinale[index]*/,
+            url: urls[index].html!.split('href="')[1].split('" rel=')[0].toString(),
+            urlimage: TouteLesUrlImage[index].replaceAll("-320x320", "").replaceAll("-320x315", "").replaceAll("-320x286", ""),
+            titre: e.text.toString().replaceAll(e.text![1], "")), );
+
         index =index+1;
       }
     }

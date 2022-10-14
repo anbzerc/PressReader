@@ -38,6 +38,7 @@ dependencies:
   bottom_bar: ^2.0.2
   web_scraper: ^0.1.4
   cached_network_image: ^3.2.2
+  flutter_cache_manager: ^3.3.0
   sqflite: any
   path: any
   webfeed: ^0.7.0
@@ -74,7 +75,7 @@ flutter:
     - assets/zone-militaire.png
     - assets/globe.jpg
     - assets/indisponible.jpg
-    - assets/le-figaro.jpg
+    - assets/le-figaro.png
   fonts:
     - family: Caveat
       fonts:
