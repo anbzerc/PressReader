@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pressreaderflutter/article.dart';
 import 'package:chaleno/chaleno.dart' ;
 import 'package:html/parser.dart' as html_library_parser;
+import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 import 'package:webfeed/domain/rss_item.dart';
 import 'package:pressreaderflutter/services/HtmlParser.dart';
@@ -61,130 +62,153 @@ class LeFigaro extends StatelessWidget {
     Societe = listeFigaro(category_map["Société"]);
     Sante = listeFigaro(category_map["Santé"]);
 
-    return DefaultTabController(
-        initialIndex: 1,
-        length: category.length,
-        child: Scaffold(
-            appBar: AppBar(
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("Le Figaro"),
+        ),
+        body:
+        DefaultTabController(
+            animationDuration: Duration.zero,
+            length: category.length,
+            child: Column(
+              children:  [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Center(child: Image.asset("assets/le-figaro.png"),),
+                ),
+                Container(
+                  child: TabBar(
+                    labelStyle: const TextStyle(fontSize: 18, fontFamily: "sansserif"),
+                    indicatorWeight: 3,
+                    indicator: MaterialIndicator(color: Colors.blue),
+                    indicatorSize: TabBarIndicatorSize.label ,
+                    isScrollable: true,
+                    splashFactory: NoSplash.splashFactory,
+                    enableFeedback: true,
 
-                title: const Text("Le Figaro"),
-                bottom: const TabBar(
+                    labelColor: Colors.black,
+                    tabs: category,
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: TabBarView(
+                      children: [
+                        for(var element in category_map.entries)...[
+                          FutureBuilder(
+                            future: list_futureListeArticle[element.key],
+                            builder: (context , snapshot) { try {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Center(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      CircularProgressIndicator(semanticsLabel: "Chargement..."),
+                                    ],
+                                  ),
+                                );
+                              } else if (snapshot.hasData) {
+                                if (snapshot.hasError) {
+                                  return Text('${snapshot.error} occurred');
+                                } else if (snapshot.hasData) {
+                                  return Column(
+                                    children: [ Expanded(
 
-                  isScrollable: true,
-                  labelColor: Colors.black,
-                  tabs: category,
-                  automaticIndicatorColorAdjustment: true,
-                )
-            ),
-            body: TabBarView(
-              children: [
-                for(var element in category_map.entries)...[
-                FutureBuilder(
-                  future: list_futureListeArticle[element.key],
-                  builder: (context , snapshot) { try {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            CircularProgressIndicator(semanticsLabel: "Chargement..."),
-                          ],
-                        ),
-                      );
-                    } else if (snapshot.hasData) {
-                      if (snapshot.hasError) {
-                        return Text('${snapshot.error} occurred');
-                      } else if (snapshot.hasData) {
-                        return Column(
-                          children: [ Expanded(
+                                        child: ListView.builder(
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.vertical,
+                                            itemCount: snapshot.data!.length,
 
-                              child: ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: snapshot.data!.length,
+                                            itemBuilder: (context, index) {
+                                              var urlimage=snapshot.data![index].urlimage;
+                                              return GestureDetector(
+                                                onTap: () => Navigator.push(
+                                                    context, MaterialPageRoute(builder: (context) =>
+                                                    FutureBuilder<Article>(
+                                                        future: LeFigaroArticle(snapshot.data![index].url),
+                                                        builder: (context, snapshot) {
+                                                          if (snapshot.connectionState ==
+                                                              ConnectionState.waiting) {
+                                                            return Center(
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment
+                                                                    .center,
+                                                                mainAxisAlignment: MainAxisAlignment
+                                                                    .center,
+                                                                children: const [
+                                                                  CircularProgressIndicator(
+                                                                    semanticsLabel: "Chargement...",),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          } else if (snapshot.connectionState == ConnectionState.done) {
+                                                            if (snapshot.hasError) {
+                                                              return Text('${snapshot.error} occurred');
+                                                            } else if (snapshot.hasData) {
+                                                              return
+                                                                Scaffold(
+                                                                    appBar: AppBar(),
+                                                                    body: SingleChildScrollView(
+                                                                        scrollDirection: Axis.vertical,
+                                                                        child: Column(children: [
+                                                                          ArticleLayout().articlelayout(Article(
+                                                                              title: snapshot.data!.title,
+                                                                              url: snapshot.data!.url,
+                                                                              auteur: snapshot.data!.auteur,
+                                                                              description: snapshot.data!.description,
+                                                                              urlImage: urlimage,//urlimage,
+                                                                              contenu: snapshot.data!.contenu,
+                                                                              date: snapshot.data!.date))
+                                                                        ],
 
-                                  itemBuilder: (context, index) {
-                                    var urlimage=snapshot.data![index].urlimage;
-                                    return GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder: (context) =>
-                                          FutureBuilder<Article>(
-                                              future: LeFigaroArticle(snapshot.data![index].url),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.connectionState ==
-                                                    ConnectionState.waiting) {
-                                                  return Center(
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment
-                                                          .center,
-                                                      mainAxisAlignment: MainAxisAlignment
-                                                          .center,
-                                                      children: const [
-                                                        CircularProgressIndicator(
-                                                          semanticsLabel: "Chargement...",),
-                                                      ],
-                                                    ),
-                                                  );
-                                                } else if (snapshot.connectionState == ConnectionState.done) {
-                                                  if (snapshot.hasError) {
-                                                    return Text('${snapshot.error} occurred');
-                                                  } else if (snapshot.hasData) {
-                                                    return
-                                                      Scaffold(
-                                                          appBar: AppBar(),
-                                                          body: SingleChildScrollView(
-                                                              scrollDirection: Axis.vertical,
-                                                              child: Column(children: [
-                                                                ArticleLayout().articlelayout(Article(
-                                                                    title: snapshot.data!.title,
-                                                                    url: snapshot.data!.url,
-                                                                    auteur: snapshot.data!.auteur,
-                                                                    description: snapshot.data!.description,
-                                                                    urlImage: urlimage,//urlimage,
-                                                                    contenu: snapshot.data!.contenu,
-                                                                    date: snapshot.data!.date))
-                                                              ],
+                                                                        )
+                                                                    )
 
-                                                              )
-                                                          )
+                                                                );
+                                                            }
+                                                            else {
+                                                              return const Text('Empty data');
+                                                            }
+                                                          } else {
+                                                            return Text('State: ${snapshot
+                                                                .connectionState}');
+                                                          }
+                                                        }
+                                                    ))),
+                                                child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index]),
+                                                //Text(snapshot.data![index].urlimage),
+                                              );
+                                            })),
 
-                                                      );
-                                                  }
-                                                  else {
-                                                    return const Text('Empty data');
-                                                  }
-                                                } else {
-                                                  return Text('State: ${snapshot
-                                                      .connectionState}');
-                                                }
-                                              }
-                                          ))),
-                                      child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index]),
-                                      //Text(snapshot.data![index].urlimage),
-                                    );
-                                  })),
+                                    ],
+                                  );
+                                }
+                              }
+                            }
+                            catch (e) {
+                              var liste = List<ListeArticle>.empty(growable: true);
+                              liste.add(ListeArticle(url: "", titre: "Erreur ${e}", urlimage: "", date: DateTime.now()));
+                              return Card(
+                                child: Text("Erreur ${e}"),
+                              );
 
-                          ],
-                        );
-                      }
-                    }
-                  }
-                  catch (e) {
-                    var liste = List<ListeArticle>.empty(growable: true);
-                    liste.add(ListeArticle(url: "", titre: "Erreur ${e}", urlimage: "", date: DateTime.now()));
-                    return Card(
-                      child: Text("Erreur ${e}"),
-                    );
+                            }
+                            return Text("erreur");
+                            } ,
+                          )
+                        ]
+                      ],
 
-                  }
-                  return Text("erreur");
-                  } ,
-                )
-              ]
+                    ),
+                  ),
+                ),
               ],
+            )
+        )
 
-        )
-        )
+
     );
   }
 

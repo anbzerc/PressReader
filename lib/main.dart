@@ -15,7 +15,13 @@ class MyApp extends StatelessWidget {
 
   @override // constructeur de l'interface
   Widget build(BuildContext context) {
-    return MaterialApp( theme: ThemeData(useMaterial3: true), home: NavigationExample(), debugShowCheckedModeBanner: false,);
+    return MaterialApp(
+      theme: ThemeData(
+          useMaterial3: true
+      ),
+      home: NavigationExample(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
 

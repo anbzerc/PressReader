@@ -68,7 +68,9 @@ class _Opex360 extends State<Opex360State>{
                 } else if (snapshot.hasData) {
 
                   return Column(
-                    children: [ Expanded(
+                    children: [
+
+                      Expanded(
 
                         child: ListView.builder(
                             scrollDirection: Axis.vertical,

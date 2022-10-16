@@ -85,7 +85,8 @@ class ArticleLayout extends StatelessWidget {
 
         if  (article.description == "")...[
           CachedNetworkImage(
-
+            /* todo cache manager avec la base de donée sql*/
+            useOldImageOnUrlChange: true,
             filterQuality: FilterQuality.high,
             imageUrl: article.urlImage,
             progressIndicatorBuilder: (context, url, downloadProgress) =>
