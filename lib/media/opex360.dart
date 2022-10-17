@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
-import 'package:pressreaderflutter/article.dart';
+import 'package:pressreaderflutter/models/article.dart';
 import 'package:chaleno/chaleno.dart' ;
 
 import 'package:web_scraper/web_scraper.dart';
-import 'package:pressreaderflutter/article.dart';
+import 'package:pressreaderflutter/models/article.dart';
 
 const List<Widget> FirstPageSelected = <Widget>[
   Text('   1   '),

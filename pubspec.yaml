@@ -73,10 +73,11 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
-    - assets/zone-militaire.png
+    - assets/MediaIcons/zone-militaire.png
     - assets/globe.jpg
     - assets/indisponible.jpg
-    - assets/le-figaro.png
+    - assets/MediaIcons/le-figaro.png
+    - assets/sources.json
   fonts:
     - family: Caveat
       fonts:

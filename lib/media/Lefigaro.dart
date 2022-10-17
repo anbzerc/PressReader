@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:pressreaderflutter/article.dart';
+import 'package:pressreaderflutter/models/article.dart';
 import 'package:chaleno/chaleno.dart' ;
 import 'package:html/parser.dart' as html_library_parser;
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
@@ -65,6 +65,7 @@ class LeFigaro extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Le Figaro"),
+
         ),
         body:
         DefaultTabController(
@@ -72,10 +73,6 @@ class LeFigaro extends StatelessWidget {
             length: category.length,
             child: Column(
               children:  [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Center(child: Image.asset("assets/le-figaro.png"),),
-                ),
                 Container(
                   child: TabBar(
                     labelStyle: const TextStyle(fontSize: 18, fontFamily: "sansserif"),

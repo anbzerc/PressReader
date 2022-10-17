@@ -191,12 +191,12 @@ class ListeArticleLayout extends StatelessWidget {
         if(ListeArticle.url.contains("figaro")==true)...{
           Padding(
             padding: const EdgeInsets.fromLTRB(19, 8, 19, 3),
-            child: Image.asset("assets/le-figaro.png", width: 96.66666666666667, height: 23.333333333333332, filterQuality: FilterQuality.high,),
+            child: Image.asset("assets/MediaIcons/le-figaro.png", width: 96.66666666666667, height: 23.333333333333332, filterQuality: FilterQuality.high,),
           ),
         }else if(ListeArticle.url.contains("opex360")==true)...{
           Padding(
             padding: const EdgeInsets.fromLTRB(19, 10, 19, 0),
-            child: Image.asset("assets/zone-militaire.png", width: 96.66666666666667, height: 23.333333333333332, filterQuality: FilterQuality.high,),
+            child: Image.asset("assets/MediaIcons/zone-militaire.png", width: 96.66666666666667, height: 23.333333333333332, filterQuality: FilterQuality.high,),
           ),
         },
 

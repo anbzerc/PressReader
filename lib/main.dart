@@ -1,11 +1,12 @@
 
 import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:pressreaderflutter/article.dart';
+import 'package:pressreaderflutter/models/article.dart';
 import 'package:pressreaderflutter/pages/Journaux.dart';
 import 'package:pressreaderflutter/media/Lefigaro.dart';
-import 'package:pressreaderflutter/article.dart';
+import 'package:pressreaderflutter/models/article.dart';
 import 'package:pressreaderflutter/media/opex360.dart';
+import 'package:pressreaderflutter/services/database.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -36,12 +37,15 @@ class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
   late Future<Article> futureArticle;
   late Future<List<ListeArticle>> futurelistearticle;
+  late DatabaseService _databaseService;
   bool shadowColor = false;
   double? scrolledUnderElevation;
 
   @override
   void initState() {
     super.initState();
+    this._databaseService = DatabaseService.instance;
+    this._databaseService.initDB();
 
   }
   @override
