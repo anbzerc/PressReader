@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pressreaderflutter/models/article.dart';
 import 'package:chaleno/chaleno.dart' ;
@@ -11,6 +12,7 @@ import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 import 'package:webfeed/domain/rss_item.dart';
 import 'package:pressreaderflutter/services/HtmlParser.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 
 const category = <Widget>[
@@ -31,16 +33,17 @@ Map<String, String> category_map = {
   "Santé" : "https://www.lefigaro.fr/rss/figaro_sante.xml",
 
 };
-
-class LeFigaro extends StatelessWidget {
-  LeFigaro({super.key}) ;
+class LeFigaro extends StatefulWidget {
+      @override
+  LeFigaroWidget createState() => LeFigaroWidget();
+}
+class LeFigaroWidget extends State<LeFigaro> {
   late Future<List<ListeArticle>> la_une;
   late Future<List<ListeArticle>> flash_actu;
   late Future<List<ListeArticle>> Politique;
   late Future<List<ListeArticle>> International;
   late Future<List<ListeArticle>> Societe;
   late Future<List<ListeArticle>> Sante;
-
   late Map<String, Future<List<ListeArticle>>> list_futureListeArticle = {
     "La Une" : la_une,
     "Flash Actu" : flash_actu,
@@ -49,11 +52,15 @@ class LeFigaro extends StatelessWidget {
     "Société" : Societe,
     "Santé" : Sante,
   };
-
-  late Future<Article> futureArticle1;
+  @override
+  void initState() {
+    WebView.platform = AndroidWebView();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+
 
     flash_actu = listeFigaro("https://www.lefigaro.fr/rss/figaro_flash-actu.xml");
     la_une = listeFigaro(category_map["La Une"]);
@@ -63,8 +70,10 @@ class LeFigaro extends StatelessWidget {
     Sante = listeFigaro(category_map["Santé"]);
 
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text("Le Figaro"),
+
 
         ),
         body:
@@ -96,7 +105,7 @@ class LeFigaro extends StatelessWidget {
                           FutureBuilder(
                             future: list_futureListeArticle[element.key],
                             builder: (context , snapshot) { try {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
+                              /*if (snapshot.connectionState == ConnectionState.waiting) {
                                 return Center(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +115,7 @@ class LeFigaro extends StatelessWidget {
                                     ],
                                   ),
                                 );
-                              } else if (snapshot.hasData) {
+                              } else*/ if (snapshot.hasData) {
                                 if (snapshot.hasError) {
                                   return Text('${snapshot.error} occurred');
                                 } else if (snapshot.hasData) {
@@ -114,7 +123,6 @@ class LeFigaro extends StatelessWidget {
                                     children: [ Expanded(
 
                                         child: ListView.builder(
-                                            shrinkWrap: true,
                                             scrollDirection: Axis.vertical,
                                             itemCount: snapshot.data!.length,
 
@@ -146,7 +154,30 @@ class LeFigaro extends StatelessWidget {
                                                             } else if (snapshot.hasData) {
                                                               return
                                                                 Scaffold(
-                                                                    appBar: AppBar(),
+                                                                    bottomNavigationBar: BottomAppBar(
+                                                                      child: Row(
+                                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                                        children: [
+                                                                          IconButton(
+                                                                              onPressed: () => Navigator.push(context,
+                                                                                  MaterialPageRoute(builder: (context) {
+                                                                                    return Scaffold(
+                                                                                      appBar: AppBar(),
+                                                                                      body: WebView(
+                                                                                        initialUrl: snapshot.data!.url,
+                                                                                      ),
+                                                                                      bottomNavigationBar: BottomAppBar(
+                                                                                        child: IconButton(onPressed: () => null, icon: Icon(Icons.bookmarks_outlined, color: Colors.grey, ),alignment: Alignment.centerRight, padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
+                                                                                      ),
+                                                                                    );
+                                                                                  })), icon: Icon(Icons.language_outlined), color: Colors.grey,),
+
+                                                                          IconButton(onPressed: () => null, icon: Icon(Icons.bookmarks_outlined, color: Colors.grey, ),alignment: Alignment.centerRight, padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    appBar: AppBar(
+                                                                    ),
                                                                     body: SingleChildScrollView(
                                                                         scrollDirection: Axis.vertical,
                                                                         child: Column(children: [
@@ -281,8 +312,34 @@ Future<List<ListeArticle>> listeFigaro(url) async {
     return liste;
   }
 
+}
 
+Future<List<ListeArticle>> AllListeFigaro() async {
+  var liste = List<ListeArticle>.empty(growable: true);
+  //on importe le json avec les thematique et leurs urls
+  final String response = await rootBundle.loadString('assets/sources.json');
+  final data = await jsonDecode(response)["items"]["lefigaro"];
+  final category = data["rubriques"].toString().split("_");
+  final categoryUrlTemp = data["rss"].toString().replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "").split(",");
+  final category_lenght = category.length;
+  var url = List<String>.empty(growable: true);
+  var indexTmp = 0;
+  while(indexTmp<category_lenght) {
+    url.add(categoryUrlTemp[indexTmp].split(': ')[1].replaceAll(RegExp(r""), ""));
+    indexTmp++;
+  }
+  // recuperer les flux rss
 
+  var liste_article = List<ListeArticle>.empty(growable: true);
+  indexTmp=0;
+  while(indexTmp<category_lenght) {
+    liste_article.addAll(await listeFigaro(url[indexTmp]));
+    indexTmp++;
+  }
+  liste_article.sort((a, b){
+    return b.date.compareTo(a.date);
+  } );
+  return liste_article;
 
 
 }

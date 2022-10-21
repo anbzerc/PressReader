@@ -3,6 +3,8 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:path/path.dart';
 
 class ListeArticle{
   final String url;
@@ -85,12 +87,17 @@ class ArticleLayout extends StatelessWidget {
 
         if  (article.description == "")...[
           CachedNetworkImage(
-            /* todo cache manager avec la base de donée sql*/
+            cacheManager: CacheManager(Config(
+                "images",
+                maxNrOfCacheObjects: 100,
+                stalePeriod: const Duration(minutes: 10)
+            )),
             useOldImageOnUrlChange: true,
             filterQuality: FilterQuality.high,
             imageUrl: article.urlImage,
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+
+            //progressIndicatorBuilder: (context, url, downloadProgress) =>
+            //    Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
             errorWidget: (context, url, error) => Image.asset("assets/indisponible"),
           ),
 
@@ -118,7 +125,11 @@ class ArticleLayout extends StatelessWidget {
         ] else ... [
 
           CachedNetworkImage(
-
+            cacheManager: CacheManager(Config(
+                "images",
+                maxNrOfCacheObjects: 100,
+                stalePeriod: const Duration(minutes: 10)
+            )),
             filterQuality: FilterQuality.high,
             imageUrl: article.urlImage,
             progressIndicatorBuilder: (context, url, downloadProgress) =>
@@ -169,21 +180,34 @@ class ListeArticleLayout extends StatelessWidget {
 
   @override
   Widget ListViewArticleLayout(ListeArticle ListeArticle){
+    var is_image = true;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
 
-        if (ListeArticle.urlimage.startsWith("http")==true)...[
+        if (ListeArticle.urlimage != "erreur")...[
 
           Padding(
             padding: const EdgeInsets.fromLTRB(19, 22, 19, 0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
+                fadeInCurve: Curves.linear,
+                fadeOutDuration: Duration.zero,
+                fadeInDuration: Duration(milliseconds: 400),
+                placeholder: (context, string) => const SizedBox(height: 200, width: 400, child: null,),
+                cacheManager: CacheManager(Config(
+                  "images",
+                  maxNrOfCacheObjects: 100,
+                  stalePeriod: const Duration(minutes: 5)
+                )),
                 filterQuality: FilterQuality.high,
                 imageUrl: ListeArticle.urlimage,
-                errorWidget: (context, url, error) => Image.asset("assets/indisponible"),
+                errorWidget: (context, url, error) {
+                  is_image=false;
+                  return Text(ListeArticle.urlimage.toString());
+                },
                 ),
             ),
           )

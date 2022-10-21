@@ -1,11 +1,16 @@
 
+import 'dart:convert';
+
 import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pressreaderflutter/models/RssSource.dart';
 import 'package:pressreaderflutter/models/article.dart';
 import 'package:pressreaderflutter/pages/Journaux.dart';
 import 'package:pressreaderflutter/media/Lefigaro.dart';
 import 'package:pressreaderflutter/models/article.dart';
 import 'package:pressreaderflutter/media/opex360.dart';
+import 'package:pressreaderflutter/services/LastArticle.dart';
 import 'package:pressreaderflutter/services/database.dart';
 void main() {
   runApp(const MyApp());
@@ -20,6 +25,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           useMaterial3: true
       ),
+      themeAnimationCurve: Curves.slowMiddle,
+
       home: NavigationExample(),
       debugShowCheckedModeBanner: false,
     );
@@ -37,6 +44,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
   late Future<Article> futureArticle;
   late Future<List<ListeArticle>> futurelistearticle;
+  late Future<List<RssSources>> futurersssSources;
   late DatabaseService _databaseService;
   bool shadowColor = false;
   double? scrolledUnderElevation;
@@ -47,12 +55,13 @@ class _NavigationExampleState extends State<NavigationExample> {
     this._databaseService = DatabaseService.instance;
     this._databaseService.initDB();
 
+
   }
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    futureArticle = opex360("http://www.opex360.com/2022/09/30/la-turquie-confirme-avoir-des-discussions-pour-se-procurer-des-avions-de-combat-eurofighter-typhoon/");
-    futurelistearticle = listeOpex360("http://www.opex360.com");
+    //futurersssSources = GetLastArticle().listeSources();
+    futurelistearticle = AllListeFigaro();
     return Scaffold(
       appBar: AppBar(
         title: Text("PressReader", style: TextStyle(fontFamily: "Caveat", fontSize: 25),),
@@ -60,6 +69,7 @@ class _NavigationExampleState extends State<NavigationExample> {
         shadowColor: shadowColor ? Theme.of(context).colorScheme.shadow : null,
       ),
       bottomNavigationBar: NavigationBar(
+
           surfaceTintColor: Colors.white ,
           onDestinationSelected: (int index) {
             setState(() {
@@ -87,40 +97,106 @@ class _NavigationExampleState extends State<NavigationExample> {
           ],
           animationDuration: Duration(milliseconds: 600)),
       body: <Widget>[
-        SingleChildScrollView(
+        FutureBuilder(
+          future: futurelistearticle,
+          builder: (context , snapshot) { try {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    CircularProgressIndicator(semanticsLabel: "Chargement..."),
+                  ],
+                ),
+              );
+            } else if (snapshot.hasData) {
+              if (snapshot.hasError) {
+                return Text('${snapshot.error} occurred');
+              } else if (snapshot.hasData) {
+                return Column(
+                  children: [ Expanded(
 
-          child: FutureBuilder<Article>(
-            future: futureArticle,
-            builder: (context, snapshot){
-              if (snapshot.connectionState == ConnectionState.waiting){
-                  return Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(semanticsLabel: "Chargement...",),
-                      ],
-                    ),
-                  );
-              } else if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return Text('${snapshot.error} occurred');
-                } else if (snapshot.hasData) {
-                  return Column(
-                    children: [
-                        ArticleLayout().articlelayout(Article(title: snapshot.data!.title,url: snapshot.data!.url, auteur: snapshot.data!.auteur, description: snapshot.data!.description, urlImage: snapshot.data!.urlImage, contenu: snapshot.data!.contenu, date: snapshot.data!.date))
-                    ],
-                  );
+                      child: ListView.builder(
 
-                }
-                else {
-                  return const Text('Empty data');
-                }
-              } else {
-                return Text('State: ${snapshot.connectionState}');
+                          scrollDirection: Axis.vertical,
+                          itemCount: snapshot.data!.length,
+
+                          itemBuilder: (context, index) {
+                            var urlimage=snapshot.data![index].urlimage;
+                            return GestureDetector(
+                              onTap: () => Navigator.push(
+                                  context, MaterialPageRoute(builder: (context) =>
+                                  FutureBuilder<Article>(
+                                      future: LeFigaroArticle(snapshot.data![index].url),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Center(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .center,
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .center,
+                                              children: const [
+                                                CircularProgressIndicator(
+                                                  semanticsLabel: "Chargement...",),
+                                              ],
+                                            ),
+                                          );
+                                        } else if (snapshot.connectionState == ConnectionState.done) {
+                                          if (snapshot.hasError) {
+                                            return Text('${snapshot.error} occurred');
+                                          } else if (snapshot.hasData) {
+                                            return
+                                              Scaffold(
+                                                  appBar: AppBar(),
+                                                  body: SingleChildScrollView(
+                                                      scrollDirection: Axis.vertical,
+                                                      child: Column(children: [
+                                                        ArticleLayout().articlelayout(Article(
+                                                            title: snapshot.data!.title,
+                                                            url: snapshot.data!.url,
+                                                            auteur: snapshot.data!.auteur,
+                                                            description: snapshot.data!.description,
+                                                            urlImage: urlimage,//urlimage,
+                                                            contenu: snapshot.data!.contenu,
+                                                            date: snapshot.data!.date))
+                                                      ],
+
+                                                      )
+                                                  )
+
+                                              );
+                                          }
+                                          else {
+                                            return const Text('Empty data');
+                                          }
+                                        } else {
+                                          return Text('State: ${snapshot
+                                              .connectionState}');
+                                        }
+                                      }
+                                  ))),
+                              child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index]),
+                            );
+                          })),
+
+                  ],
+                );
               }
             }
-          ),
+          }
+          catch (e) {
+            var liste = List<ListeArticle>.empty(growable: true);
+            liste.add(ListeArticle(url: "", titre: "Erreur ${e}", urlimage: "", date: DateTime.now()));
+            return Card(
+              child: Text("Erreur ${e}"),
+            );
+
+          }
+          return Text("erreur");
+          } ,
         ),
         Container(
 
