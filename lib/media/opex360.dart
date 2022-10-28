@@ -115,7 +115,7 @@ class _Opex360 extends State<Opex360State>{
                                                               description: snapshot.data!.description,
                                                               urlImage: urlimage,//urlimage,
                                                               contenu: snapshot.data!.contenu,
-                                                              date: snapshot.data!.date))
+                                                              date: snapshot.data!.date), context)
                                                         ] ,
 
                                                         )
@@ -132,7 +132,7 @@ class _Opex360 extends State<Opex360State>{
                                           }
                                         }
                                     ))),
-                                child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index]),
+                                child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index], context),
                                 //Text(snapshot.data![index].urlimage),
                               );
                             }

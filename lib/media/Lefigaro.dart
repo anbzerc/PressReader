@@ -188,7 +188,7 @@ class LeFigaroWidget extends State<LeFigaro> {
                                                                               description: snapshot.data!.description,
                                                                               urlImage: urlimage,//urlimage,
                                                                               contenu: snapshot.data!.contenu,
-                                                                              date: snapshot.data!.date))
+                                                                              date: snapshot.data!.date), context)
                                                                         ],
 
                                                                         )
@@ -205,7 +205,7 @@ class LeFigaroWidget extends State<LeFigaro> {
                                                           }
                                                         }
                                                     ))),
-                                                child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index]),
+                                                child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index], context),
                                                 //Text(snapshot.data![index].urlimage),
                                               );
                                             })),
@@ -288,7 +288,6 @@ Future<List<ListeArticle>> listeFigaro(url) async {
     final client = Dio();
     final response = await client.get(url);
     final feed = RssFeed.parse(response.data);
-
     for(RssItem rssitem in feed.items!){
       try {
         if(rssitem.link != null){

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<channel><item>
+    <feedname>Le Figaro</feedname>
+    <imagepath>assets/MediaIcons/le-figaro.png</imagepath>
+    <description>A la Une : Retrouvez toute l'actualité en France, à l'international, l'actualité économique et politique avec Le Figaro</description>
+    <feedurl>http://www.lefigaro.fr</feedurl>
+    <categories>
+        <source>
+            <feedname>La Une</feedname>
+            <feedurl>https://www.lefigaro.fr/rss/figaro_actualites.xml</feedurl>
+        </source>
+        <source>
+            <feedname>Politique</feedname>
+            <feedurl>https://www.lefigaro.fr/rss/figaro_politique.xml</feedurl>
+        </source>
+        <source>
+            <feedname>International</feedname>
+            <feedurl>https://www.lefigaro.fr/rss/figaro_international.xml</feedurl>
+        </source>
+        <source>
+            <feedname>France</feedname>
+            <feedurl>https://www.lefigaro.fr/rss/figaro_actualite-france.xml</feedurl>
+        </source>
+        <source>
+            <feedname>Sciences et Environement</feedname>
+            <feedurl>https://www.lefigaro.fr/rss/figaro_sciences.xml</feedurl>
+        </source>
+        <source>
+            <feedname>Economie</feedname>
+            <feedurl>https://www.lefigaro.fr/rss/figaro_economie.xml</feedurl>
+        </source>
+        <source>
+            <feedname>Culture</feedname>
+            <feedurl>https://www.lefigaro.fr/rss/figaro_culture.xml</feedurl>
+        </source>
+    </categories>
+</item>
+    <item>
+        <feedname>Opex360</feedname>
+        <description>Actualitée de la défense et de la sécurité</description>
+        <imagepath>assets/MediaIcons/zone-militaire.png</imagepath>
+        <feedurl>http://www.opex360.com/</feedurl>
+        <categories>
+            <source>
+                <feedname>Feed</feedname>
+                <feedurl>http://www.opex360.com/feed/</feedurl>
+            </source>
+        </categories>
+    </item>
+</channel>

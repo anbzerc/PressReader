@@ -44,7 +44,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
   late Future<Article> futureArticle;
   late Future<List<ListeArticle>> futurelistearticle;
-  late Future<List<RssSources>> futurersssSources;
+  late Future<List<RssSourceModel>> futurersssSources;
   late DatabaseService _databaseService;
   bool shadowColor = false;
   double? scrolledUnderElevation;
@@ -52,10 +52,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   @override
   void initState() {
     super.initState();
-    this._databaseService = DatabaseService.instance;
-    this._databaseService.initDB();
-
-
+    _databaseService = DatabaseService.instance;
   }
   @override
   Widget build(BuildContext context) {
@@ -161,7 +158,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                                                             description: snapshot.data!.description,
                                                             urlImage: urlimage,//urlimage,
                                                             contenu: snapshot.data!.contenu,
-                                                            date: snapshot.data!.date))
+                                                            date: snapshot.data!.date), context)
                                                       ],
 
                                                       )
@@ -178,7 +175,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                                         }
                                       }
                                   ))),
-                              child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index]),
+                              child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index], context),
                             );
                           })),
 
@@ -213,7 +210,12 @@ class _NavigationExampleState extends State<NavigationExample> {
         Container(
           color: Colors.white,
           alignment: Alignment.center,
-          child: const Text('Page 4'),
+          child: Column(
+            children: [
+              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Le Figaro", imagePath: "imagePath", url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("lE FIGARO"),),
+              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Opex360", imagePath: "imagePath", url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("Opex360"),)
+            ],
+          )
         ),
       ][currentPageIndex],
     );

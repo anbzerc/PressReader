@@ -8,30 +8,35 @@
         "image": "assets/MediaIcons/le-figaro.png",
         "rubriques": "La Une_Politique_International_Société_Sciences et Environement_Santé_Economie_Culture_Flash Actu",
         "rss":
-        {
-          "La Une": "https://www.lefigaro.fr/rss/figaro_actualites.xml",
-          "Politique": "https://www.lefigaro.fr/rss/figaro_politique.xml",
-          "International": "https://www.lefigaro.fr/rss/figaro_international.xml",
-          "Société": "https://www.lefigaro.fr/rss/figaro_actualite-france.xml",
-          "Sciences et Environement": "https://www.lefigaro.fr/rss/figaro_sciences.xml",
-          "Santé": "https://www.lefigaro.fr/rss/figaro_sante.xml",
-          "Economie": "https://www.lefigaro.fr/rss/figaro_economie.xml",
-          "Culture": "https://www.lefigaro.fr/rss/figaro_culture.xml",
-          "Flash Actu": "https://www.lefigaro.fr/rss/figaro_flash-actu.xml"
-        }
+        [
+          {
+            "La Une": "https://www.lefigaro.fr/rss/figaro_actualites.xml",
+            "Politique": "https://www.lefigaro.fr/rss/figaro_politique.xml",
+            "International": "https://www.lefigaro.fr/rss/figaro_international.xml",
+            "Société": "https://www.lefigaro.fr/rss/figaro_actualite-france.xml",
+            "Sciences et Environement": "https://www.lefigaro.fr/rss/figaro_sciences.xml",
+            "Santé": "https://www.lefigaro.fr/rss/figaro_sante.xml",
+            "Economie": "https://www.lefigaro.fr/rss/figaro_economie.xml",
+            "Culture": "https://www.lefigaro.fr/rss/figaro_culture.xml",
+            "Flash Actu": "https://www.lefigaro.fr/rss/figaro_flash-actu.xml"
+          }
+        ]
 
       },
-    "opex360": [
+    "opex360":
       {
         "name": "Opex360",
         "url": "http://www.opex360.com/",
         "image": "assets/MediaIcons/zone-militaire.png",
-        "rss": [
-          {
-            "Feed": "http://www.opex360.com/feed/"
-          }
-        ]
+        "rubriques": "Feed_",
+        "rss":
+          [
+            {
+              "Feed": "http://www.opex360.com/feed/"
+            }
+          ]
+
       }
-    ]
+
   }
 }

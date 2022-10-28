@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path/path.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class ListeArticle{
   final String url;
@@ -75,11 +76,11 @@ class ArticleLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return articlelayout(Article as Article);
+    return articlelayout(Article as Article, context);
   }
 
   @override
-  Widget articlelayout(Article article){
+  Widget articlelayout(Article article, BuildContext context){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -120,7 +121,27 @@ class ArticleLayout extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
             child: Text(article.contenu, style: const TextStyle(fontSize: 23, fontFamily: "texte")),
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                      return Scaffold(
+                        appBar: AppBar(),
+                        body: WebView(
+                          initialUrl: article.url,
+                        ),
+                        bottomNavigationBar: BottomAppBar(
+                          child: IconButton(onPressed: () => null, icon: Icon(Icons.bookmarks_outlined, color: Colors.grey, ),alignment: Alignment.centerRight, padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
+                        ),
+                      );
+                    })), icon: Icon(Icons.language_outlined), color: Colors.grey,),
+
+              IconButton(onPressed: () => null, icon: Icon(Icons.bookmarks_outlined, color: Colors.grey, ),alignment: Alignment.centerRight, padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
+            ],
+          ),
 
         ] else ... [
 
@@ -160,7 +181,27 @@ class ArticleLayout extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
             child: Text(article.contenu, style: const TextStyle(fontSize: 23, fontFamily: "texte")),
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                      return Scaffold(
+                        appBar: AppBar(),
+                        body: WebView(
+                          initialUrl: article.url,
+                        ),
+                        bottomNavigationBar: BottomAppBar(
+                          child: IconButton(onPressed: () => null, icon: Icon(Icons.bookmarks_outlined, color: Colors.grey, ),alignment: Alignment.centerRight, padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
+                        ),
+                      );
+                    })), icon: Icon(Icons.language_outlined), color: Colors.grey,),
+
+              IconButton(onPressed: () => null, icon: Icon(Icons.bookmarks_outlined, color: Colors.grey, ),alignment: Alignment.centerRight, padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
+            ],
+          ),
         ]
       ],
     );
@@ -175,11 +216,11 @@ class ListeArticleLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     late Future<List<ListeArticle>> futurelistearticle;
-    return ListViewArticleLayout(ListeArticle as ListeArticle);
+    return ListViewArticleLayout(ListeArticle as ListeArticle, context);
   }
 
   @override
-  Widget ListViewArticleLayout(ListeArticle ListeArticle){
+  Widget ListViewArticleLayout(ListeArticle ListeArticle, BuildContext context){
     var is_image = true;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,7 +236,7 @@ class ListeArticleLayout extends StatelessWidget {
               child: CachedNetworkImage(
                 fadeInCurve: Curves.linear,
                 fadeOutDuration: Duration.zero,
-                fadeInDuration: Duration(milliseconds: 400),
+                fadeInDuration: const Duration(milliseconds: 400),
                 placeholder: (context, string) => const SizedBox(height: 200, width: 400, child: null,),
                 cacheManager: CacheManager(Config(
                   "images",
@@ -239,7 +280,8 @@ class ListeArticleLayout extends StatelessWidget {
             color: Colors.grey,
 
           ),
-        )
+        ),
+
 
 
 

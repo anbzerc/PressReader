@@ -6,23 +6,29 @@ import 'package:pressreaderflutter/models/article.dart';
 import 'package:flutter/services.dart';
 import 'package:pressreaderflutter/models/RssSource.dart';
 import 'package:pressreaderflutter/services/RssParser.dart';
+import 'package:webfeed/webfeed.dart';
+import 'package:xml/xml.dart';
 
 class GetLastArticle{
 
-  Future<List<RssSources>> listeSources () async {
-    final String response = await rootBundle.loadString('assets/sources.json');
-    final data = await jsonDecode(response);
-    var sources = data["items"]["lefigaro"];
-    var ListeSources = List<RssSources>.empty(growable: true);
-    for(var element in sources){
-      ListeSources.add(RssSources(
-          name: element["name"],
-          image: element["image"],
-          rubriques: element["rubriques"].toString().replaceAll("[", "").replaceAll("]", "").split("_"),
-          rss: element["rss"].toString().replaceAll('"', "").replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "").split(",")
-      )
-      );
+  Future<List<RssSourceModel>> listeSources () async {
+    List<RssSourceModel> ListeSources = List<RssSourceModel>.empty(growable: true);
+
+    final String response = await rootBundle.loadString('assets/sources.xml');
+    final data = XmlDocument.parse(response);
+    for(var item in data.findAllElements("item")){
+      var sources = item.getElement("categories")!.childElements.toList() ;
+      List<String> rubriques = List<String>.generate(sources.length, (index) => sources[index].getElement("feedname")!.text);
+      List<String> rss = List<String>.generate(sources.length, (index) => sources[index].getElement("feedurl")!.text);
+      ListeSources.add(
+          RssSourceModel(
+              name: item.getElement("feedname")!.text,
+              imagePath: item.getElement("imagepath")!.text,
+              url: item.getElement("feedurl")!.text,
+              rubriques: rubriques,
+              rss: rss ));
     }
+
     return ListeSources;
   }
 
