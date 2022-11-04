@@ -64,7 +64,7 @@ class DatabaseService {
     List<RssSourceModel> rssSources = List.generate(maps.length, (index) => RssSourceModel.fromMap(maps[index]));
 
     if(rssSources.isEmpty){
-      rssSources = [RssSourceModel(name: "any",url: "", imagePath: "", rubriques: List<String>.empty(), rss: List<String>.empty())];
+      rssSources = [RssSourceModel(name: "any",url: "", imagepath: "", rubriques: List<String>.empty(), rss: List<String>.empty())];
     }
 
     return rssSources;

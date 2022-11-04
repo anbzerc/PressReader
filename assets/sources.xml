@@ -2,6 +2,7 @@
 <channel><item>
     <feedname>Le Figaro</feedname>
     <imagepath>assets/MediaIcons/le-figaro.png</imagepath>
+    <isparsingsupported>true</isparsingsupported>
     <description>A la Une : Retrouvez toute l'actualité en France, à l'international, l'actualité économique et politique avec Le Figaro</description>
     <feedurl>http://www.lefigaro.fr</feedurl>
     <categories>
@@ -38,8 +39,9 @@
     <item>
         <feedname>Opex360</feedname>
         <description>Actualitée de la défense et de la sécurité</description>
+        <isparsingsupported>true</isparsingsupported>
         <imagepath>assets/MediaIcons/zone-militaire.png</imagepath>
-        <feedurl>http://www.opex360.com/</feedurl>
+        <feedurl>http://www.opex360.com</feedurl>
         <categories>
             <source>
                 <feedname>Feed</feedname>

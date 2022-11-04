@@ -31,7 +31,7 @@ class AddSourceScreen extends StatelessWidget {
                         child: Card(
                           child: Column(
                             children: [
-                              Image.asset(rssSource[index].imagePath, width: 90),
+                              Image.asset(rssSource[index].imagepath, width: 90),
                               Text(rssSource[index].name)
                             ],),
                         ),

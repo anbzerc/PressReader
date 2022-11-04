@@ -212,8 +212,8 @@ class _NavigationExampleState extends State<NavigationExample> {
           alignment: Alignment.center,
           child: Column(
             children: [
-              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Le Figaro", imagePath: "imagePath", url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("lE FIGARO"),),
-              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Opex360", imagePath: "imagePath", url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("Opex360"),)
+              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Le Figaro", imagepath: "imagePath", url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("lE FIGARO"),),
+              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Opex360", imagepath: "imagePath", url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("Opex360"),)
             ],
           )
         ),

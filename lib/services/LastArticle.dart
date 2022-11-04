@@ -18,12 +18,14 @@ class GetLastArticle{
     final data = XmlDocument.parse(response);
     for(var item in data.findAllElements("item")){
       var sources = item.getElement("categories")!.childElements.toList() ;
+      var isparsingsupported = item.getElement("isparsingsupported")!.text;
       List<String> rubriques = List<String>.generate(sources.length, (index) => sources[index].getElement("feedname")!.text);
       List<String> rss = List<String>.generate(sources.length, (index) => sources[index].getElement("feedurl")!.text);
       ListeSources.add(
           RssSourceModel(
               name: item.getElement("feedname")!.text,
-              imagePath: item.getElement("imagepath")!.text,
+              isparsingsupported: bool.fromEnvironment(isparsingsupported),
+              imagepath: item.getElement("imagepath")!.text,
               url: item.getElement("feedurl")!.text,
               rubriques: rubriques,
               rss: rss ));
