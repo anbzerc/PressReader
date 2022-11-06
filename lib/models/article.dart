@@ -4,7 +4,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:path/path.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ListeArticle{
@@ -209,8 +208,8 @@ class ArticleLayout extends StatelessWidget {
 
   }}
 
-class ListeArticleLayout extends StatelessWidget {
-  const ListeArticleLayout({Key? key}) : super(key: key);
+class ItemListeArticleLayout extends StatelessWidget {
+  const ItemListeArticleLayout({Key? key}) : super(key: key);
 
 
   @override
@@ -293,24 +292,7 @@ class ListeArticleLayout extends StatelessWidget {
 
   }
 
-  @override
-  listearticlelayout(List<ListeArticle> listearticle){
-    var listecard = List<Widget>.empty(growable: true);
 
-    for(var element in listearticle){
-      listecard.add(Card(
-        child: Column(
-          children: [
-            Image.network(element.urlimage),
-            Text(element.titre)
-          ],
-        ),
-      ));
-    }
-
-
-    return listecard;
-  }
 
 
 }

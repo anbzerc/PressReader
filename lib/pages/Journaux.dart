@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:pressreaderflutter/layout/ListArticleLayout.dart';
 import 'package:pressreaderflutter/media/Lefigaro.dart';
 import 'package:pressreaderflutter/media/opex360.dart';
+import 'package:pressreaderflutter/models/article.dart';
 import 'package:pressreaderflutter/pages/screens/AddSourcesScreen.dart';
+import 'package:pressreaderflutter/services/GetListeArticle.dart';
 import 'package:pressreaderflutter/services/database.dart';
 
-import '../models/RssSource.dart';
+import '../models/RssSourceModel.dart';
 
 class Journaux extends StatelessWidget {
   const Journaux({Key? key}) : super(key: key);
@@ -33,11 +36,10 @@ class Journaux extends StatelessWidget {
                       itemCount: rssSource.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> Scaffold(
-                                appBar: AppBar(
-                                  title: Text(rssSource[index].name),
-                                ),
-                                body: Opex360State(urlpourlaliste: rssSource[index].url,)))),
+                            onTap: () => Navigator.push(context, MaterialPageRoute(
+                                builder: (context)=> GetListeArticle().listeArticle(rssSource[index])
+                            )
+                            ),
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Card(
@@ -45,7 +47,7 @@ class Journaux extends StatelessWidget {
                                   children: [
                                     Image.asset(
                                         rssSource[index].imagepath, width: 90),
-                                    Text(rssSource[index].name)
+                                    Text(rssSource[index].isparsingsupported.toString())
                                   ],),
                               ),
                             )
@@ -67,7 +69,7 @@ class Journaux extends StatelessWidget {
                             );
                             return child;
                           },
-                          
+
                           transitionDuration: const Duration(milliseconds: 400),
                           context: context,
                           pageBuilder: (context, animation, secondaryAnimation) {

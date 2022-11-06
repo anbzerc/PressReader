@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pressreaderflutter/models/RssSource.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pressreaderflutter/models/RssSourceModel.dart';
 import 'package:pressreaderflutter/models/article.dart';
 import 'package:pressreaderflutter/pages/Journaux.dart';
 import 'package:pressreaderflutter/media/Lefigaro.dart';
@@ -21,26 +22,28 @@ class MyApp extends StatelessWidget {
 
   @override // constructeur de l'interface
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-          useMaterial3: true
-      ),
-      themeAnimationCurve: Curves.slowMiddle,
+    return ProviderScope(
+      child: MaterialApp(
+        theme: ThemeData(
+            useMaterial3: true
+        ),
+        themeAnimationCurve: Curves.slowMiddle,
 
-      home: NavigationExample(),
-      debugShowCheckedModeBanner: false,
+        home: Home(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
 
-class NavigationExample extends StatefulWidget {
-  const NavigationExample({super.key});
+class Home extends ConsumerStatefulWidget {
+  const Home({super.key});
 
   @override
-  State<NavigationExample> createState() => _NavigationExampleState();
+  ConsumerState<Home> createState() => _HomeState();
 }
 
-class _NavigationExampleState extends State<NavigationExample> {
+class _HomeState extends ConsumerState<Home> {
   int currentPageIndex = 0;
   late Future<Article> futureArticle;
   late Future<List<ListeArticle>> futurelistearticle;
@@ -175,7 +178,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                                         }
                                       }
                                   ))),
-                              child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index], context),
+                              child: ItemListeArticleLayout().ListViewArticleLayout(snapshot.data![index], context),
                             );
                           })),
 
@@ -212,8 +215,8 @@ class _NavigationExampleState extends State<NavigationExample> {
           alignment: Alignment.center,
           child: Column(
             children: [
-              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Le Figaro", imagepath: "imagePath", url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("lE FIGARO"),),
-              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Opex360", imagepath: "imagePath", url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("Opex360"),)
+              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Le Figaro",isparsingsupported: true, imagepath: "imagePath", url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("lE FIGARO"),),
+              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Opex360", imagepath: "imagePath",isparsingsupported: true, url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("Opex360"),)
             ],
           )
         ),

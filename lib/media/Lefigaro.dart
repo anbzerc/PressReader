@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -6,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pressreaderflutter/models/article.dart';
-import 'package:chaleno/chaleno.dart' ;
+import 'package:chaleno/chaleno.dart';
 import 'package:html/parser.dart' as html_library_parser;
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:webfeed/domain/rss_feed.dart';
@@ -14,29 +13,31 @@ import 'package:webfeed/domain/rss_item.dart';
 import 'package:pressreaderflutter/services/HtmlParser.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-
 const category = <Widget>[
-  Tab(text: "La Une", ),
-  Tab(text:"Flash Actu"),
-  Tab(text:"Politique"),
-  Tab(text:"International"),
-  Tab(text:"Société"),
-  Tab(text:"Santé"),
+  Tab(
+    text: "La Une",
+  ),
+  Tab(text: "Flash Actu"),
+  Tab(text: "Politique"),
+  Tab(text: "International"),
+  Tab(text: "Société"),
+  Tab(text: "Santé"),
 ];
 
 Map<String, String> category_map = {
-  "La Une" : "https://www.lefigaro.fr/rss/figaro_actualites.xml",
-  "Flash Actu" : "https://www.lefigaro.fr/rss/figaro_flash-actu.xml",
-  "Politique" : "https://www.lefigaro.fr/rss/figaro_politique.xml",
-  "International" : "https://www.lefigaro.fr/rss/figaro_international.xml",
-  "Société" : "https://www.lefigaro.fr/rss/figaro_actualite-france.xml",
-  "Santé" : "https://www.lefigaro.fr/rss/figaro_sante.xml",
-
+  "La Une": "https://www.lefigaro.fr/rss/figaro_actualites.xml",
+  "Flash Actu": "https://www.lefigaro.fr/rss/figaro_flash-actu.xml",
+  "Politique": "https://www.lefigaro.fr/rss/figaro_politique.xml",
+  "International": "https://www.lefigaro.fr/rss/figaro_international.xml",
+  "Société": "https://www.lefigaro.fr/rss/figaro_actualite-france.xml",
+  "Santé": "https://www.lefigaro.fr/rss/figaro_sante.xml",
 };
+
 class LeFigaro extends StatefulWidget {
-      @override
+  @override
   LeFigaroWidget createState() => LeFigaroWidget();
 }
+
 class LeFigaroWidget extends State<LeFigaro> {
   late Future<List<ListeArticle>> la_une;
   late Future<List<ListeArticle>> flash_actu;
@@ -45,13 +46,14 @@ class LeFigaroWidget extends State<LeFigaro> {
   late Future<List<ListeArticle>> Societe;
   late Future<List<ListeArticle>> Sante;
   late Map<String, Future<List<ListeArticle>>> list_futureListeArticle = {
-    "La Une" : la_une,
-    "Flash Actu" : flash_actu,
-    "Politique" : Politique,
-    "International" : International,
-    "Société" : Societe,
-    "Santé" : Sante,
+    "La Une": la_une,
+    "Flash Actu": flash_actu,
+    "Politique": Politique,
+    "International": International,
+    "Société": Societe,
+    "Santé": Sante,
   };
+
   @override
   void initState() {
     WebView.platform = AndroidWebView();
@@ -60,12 +62,11 @@ class LeFigaroWidget extends State<LeFigaro> {
 
   @override
   Widget build(BuildContext context) {
-
-
-    flash_actu = listeFigaro("https://www.lefigaro.fr/rss/figaro_flash-actu.xml");
+    flash_actu =
+        listeFigaro("https://www.lefigaro.fr/rss/figaro_flash-actu.xml");
     la_une = listeFigaro(category_map["La Une"]);
     Politique = listeFigaro(category_map["Politique"]);
-    International= listeFigaro(category_map["International"]);
+    International = listeFigaro(category_map["International"]);
     Societe = listeFigaro(category_map["Société"]);
     Sante = listeFigaro(category_map["Santé"]);
 
@@ -73,25 +74,22 @@ class LeFigaroWidget extends State<LeFigaro> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text("Le Figaro"),
-
-
         ),
-        body:
-        DefaultTabController(
+        body: DefaultTabController(
             animationDuration: Duration.zero,
             length: category.length,
             child: Column(
-              children:  [
+              children: [
                 Container(
                   child: TabBar(
-                    labelStyle: const TextStyle(fontSize: 18, fontFamily: "sansserif"),
+                    labelStyle:
+                        const TextStyle(fontSize: 18, fontFamily: "sansserif"),
                     indicatorWeight: 3,
                     indicator: MaterialIndicator(color: Colors.blue),
-                    indicatorSize: TabBarIndicatorSize.label ,
+                    indicatorSize: TabBarIndicatorSize.label,
                     isScrollable: true,
                     splashFactory: NoSplash.splashFactory,
                     enableFeedback: true,
-
                     labelColor: Colors.black,
                     tabs: category,
                   ),
@@ -101,11 +99,12 @@ class LeFigaroWidget extends State<LeFigaro> {
                     height: MediaQuery.of(context).size.height,
                     child: TabBarView(
                       children: [
-                        for(var element in category_map.entries)...[
+                        for (var element in category_map.entries) ...[
                           FutureBuilder(
                             future: list_futureListeArticle[element.key],
-                            builder: (context , snapshot) { try {
-                              /*if (snapshot.connectionState == ConnectionState.waiting) {
+                            builder: (context, snapshot) {
+                              try {
+                                /*if (snapshot.connectionState == ConnectionState.waiting) {
                                 return Center(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -115,134 +114,167 @@ class LeFigaroWidget extends State<LeFigaro> {
                                     ],
                                   ),
                                 );
-                              } else*/ if (snapshot.hasData) {
-                                if (snapshot.hasError) {
-                                  return Text('${snapshot.error} occurred');
-                                } else if (snapshot.hasData) {
-                                  return Column(
-                                    children: [ Expanded(
-
-                                        child: ListView.builder(
-                                            scrollDirection: Axis.vertical,
-                                            itemCount: snapshot.data!.length,
-
-                                            itemBuilder: (context, index) {
-                                              var urlimage=snapshot.data![index].urlimage;
-                                              return GestureDetector(
-                                                onTap: () => Navigator.push(
-                                                    context, MaterialPageRoute(builder: (context) =>
-                                                    FutureBuilder<Article>(
-                                                        future: LeFigaroArticle(snapshot.data![index].url),
-                                                        builder: (context, snapshot) {
-                                                          if (snapshot.connectionState ==
-                                                              ConnectionState.waiting) {
-                                                            return Center(
-                                                              child: Column(
-                                                                crossAxisAlignment: CrossAxisAlignment
-                                                                    .center,
-                                                                mainAxisAlignment: MainAxisAlignment
-                                                                    .center,
-                                                                children: const [
-                                                                  CircularProgressIndicator(
-                                                                    semanticsLabel: "Chargement...",),
-                                                                ],
-                                                              ),
-                                                            );
-                                                          } else if (snapshot.connectionState == ConnectionState.done) {
-                                                            if (snapshot.hasError) {
-                                                              return Text('${snapshot.error} occurred');
-                                                            } else if (snapshot.hasData) {
-                                                              return
-                                                                Scaffold(
-                                                                    bottomNavigationBar: BottomAppBar(
-                                                                      child: Row(
-                                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                                        children: [
-                                                                          IconButton(
-                                                                              onPressed: () => Navigator.push(context,
-                                                                                  MaterialPageRoute(builder: (context) {
+                              } else*/
+                                if (snapshot.hasData) {
+                                  if (snapshot.hasError) {
+                                    return Text('${snapshot.error} occurred');
+                                  } else if (snapshot.hasData) {
+                                    return Column(
+                                      children: [
+                                        Expanded(
+                                            child: ListView.builder(
+                                                scrollDirection: Axis.vertical,
+                                                itemCount:
+                                                    snapshot.data!.length,
+                                                itemBuilder: (context, index) {
+                                                  var urlimage = snapshot
+                                                      .data![index].urlimage;
+                                                  return GestureDetector(
+                                                    onTap: () => Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => FutureBuilder<
+                                                                    Article>(
+                                                                future: LeFigaroArticle(
+                                                                    snapshot
+                                                                        .data![
+                                                                            index]
+                                                                        .url),
+                                                                builder: (context,
+                                                                    snapshot) {
+                                                                  if (snapshot
+                                                                          .connectionState ==
+                                                                      ConnectionState
+                                                                          .waiting) {
+                                                                    return Center(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: const [
+                                                                          CircularProgressIndicator(
+                                                                            semanticsLabel:
+                                                                                "Chargement...",
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  } else if (snapshot
+                                                                          .connectionState ==
+                                                                      ConnectionState
+                                                                          .done) {
+                                                                    if (snapshot
+                                                                        .hasError) {
+                                                                      return Text(
+                                                                          '${snapshot.error} occurred');
+                                                                    } else if (snapshot
+                                                                        .hasData) {
+                                                                      return Scaffold(
+                                                                          bottomNavigationBar:
+                                                                              BottomAppBar(
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.end,
+                                                                              children: [
+                                                                                IconButton(
+                                                                                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
                                                                                     return Scaffold(
                                                                                       appBar: AppBar(),
                                                                                       body: WebView(
                                                                                         initialUrl: snapshot.data!.url,
                                                                                       ),
                                                                                       bottomNavigationBar: BottomAppBar(
-                                                                                        child: IconButton(onPressed: () => null, icon: Icon(Icons.bookmarks_outlined, color: Colors.grey, ),alignment: Alignment.centerRight, padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
+                                                                                        child: IconButton(
+                                                                                            onPressed: () => null,
+                                                                                            icon: Icon(
+                                                                                              Icons.bookmarks_outlined,
+                                                                                              color: Colors.grey,
+                                                                                            ),
+                                                                                            alignment: Alignment.centerRight,
+                                                                                            padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
                                                                                       ),
                                                                                     );
-                                                                                  })), icon: Icon(Icons.language_outlined), color: Colors.grey,),
-
-                                                                          IconButton(onPressed: () => null, icon: Icon(Icons.bookmarks_outlined, color: Colors.grey, ),alignment: Alignment.centerRight, padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    appBar: AppBar(
-                                                                    ),
-                                                                    body: SingleChildScrollView(
-                                                                        scrollDirection: Axis.vertical,
-                                                                        child: Column(children: [
-                                                                          ArticleLayout().articlelayout(Article(
-                                                                              title: snapshot.data!.title,
-                                                                              url: snapshot.data!.url,
-                                                                              auteur: snapshot.data!.auteur,
-                                                                              description: snapshot.data!.description,
-                                                                              urlImage: urlimage,//urlimage,
-                                                                              contenu: snapshot.data!.contenu,
-                                                                              date: snapshot.data!.date), context)
-                                                                        ],
-
-                                                                        )
-                                                                    )
-
-                                                                );
-                                                            }
-                                                            else {
-                                                              return const Text('Empty data');
-                                                            }
-                                                          } else {
-                                                            return Text('State: ${snapshot
-                                                                .connectionState}');
-                                                          }
-                                                        }
-                                                    ))),
-                                                child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index], context),
-                                                //Text(snapshot.data![index].urlimage),
-                                              );
-                                            })),
-
-                                    ],
-                                  );
+                                                                                  })),
+                                                                                  icon: Icon(Icons.language_outlined),
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                                IconButton(
+                                                                                    onPressed: () => null,
+                                                                                    icon: Icon(
+                                                                                      Icons.bookmarks_outlined,
+                                                                                      color: Colors.grey,
+                                                                                    ),
+                                                                                    alignment: Alignment.centerRight,
+                                                                                    padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          appBar:
+                                                                              AppBar(),
+                                                                          body: SingleChildScrollView(
+                                                                              scrollDirection: Axis.vertical,
+                                                                              child: Column(
+                                                                                children: [
+                                                                                  ArticleLayout().articlelayout(
+                                                                                      Article(
+                                                                                          title: snapshot.data!.title,
+                                                                                          url: snapshot.data!.url,
+                                                                                          auteur: snapshot.data!.auteur,
+                                                                                          description: snapshot.data!.description,
+                                                                                          urlImage: urlimage,
+                                                                                          //urlimage,
+                                                                                          contenu: snapshot.data!.contenu,
+                                                                                          date: snapshot.data!.date),
+                                                                                      context)
+                                                                                ],
+                                                                              )));
+                                                                    } else {
+                                                                      return const Text(
+                                                                          'Empty data');
+                                                                    }
+                                                                  } else {
+                                                                    return Text(
+                                                                        'State: ${snapshot.connectionState}');
+                                                                  }
+                                                                }))),
+                                                    child: ItemListeArticleLayout()
+                                                        .ListViewArticleLayout(
+                                                            snapshot
+                                                                .data![index],
+                                                            context),
+                                                    //Text(snapshot.data![index].urlimage),
+                                                  );
+                                                })),
+                                      ],
+                                    );
+                                  }
                                 }
+                              } catch (e) {
+                                var liste =
+                                    List<ListeArticle>.empty(growable: true);
+                                liste.add(ListeArticle(
+                                    url: "",
+                                    titre: "Erreur ${e}",
+                                    urlimage: "",
+                                    date: DateTime.now()));
+                                return Card(
+                                  child: Text("Erreur ${e}"),
+                                );
                               }
-                            }
-                            catch (e) {
-                              var liste = List<ListeArticle>.empty(growable: true);
-                              liste.add(ListeArticle(url: "", titre: "Erreur ${e}", urlimage: "", date: DateTime.now()));
-                              return Card(
-                                child: Text("Erreur ${e}"),
-                              );
-
-                            }
-                            return Text("erreur");
-                            } ,
+                              return Text("erreur");
+                            },
                           )
                         ]
                       ],
-
                     ),
                   ),
                 ),
               ],
-            )
-        )
-
-
-    );
+            )));
   }
-
-
 }
-
 
 Future<Article> LeFigaroArticle(urlarticle) async {
 //Getting the response from the targeted url
@@ -257,60 +289,80 @@ Future<Article> LeFigaroArticle(urlarticle) async {
     var description = parser.description();
     var imageurl = parser.urlimage();
 
-    var contenu  = response?.getElementsByClassName("fig-paragraph").toList();
+    var contenu = response?.getElementsByClassName("fig-paragraph").toList();
     var contenu_a_parser = "";
     contenu!.forEach((element) {
-      contenu_a_parser = contenu_a_parser + element.html.toString() ;
+      contenu_a_parser = contenu_a_parser + element.html.toString();
     });
-    var contenufinal = parser.text(contenu_a_parser, textClass:  "fig-paragraph");
+    var contenufinal =
+        parser.text(contenu_a_parser, textClass: "fig-paragraph");
 
     var auteurfinal = "Par ";
-    var auteurtmp  = response?.getElementsByClassName("fig-content-metas__authors");
-    if (auteurtmp!.isEmpty == false){auteurtmp.forEach((element) { auteurfinal = auteurfinal + element.text.toString().replaceAll("Par", "") + ", "; });}
-    else {auteurfinal = "";}
+    var auteurtmp =
+        response?.getElementsByClassName("fig-content-metas__authors");
+    if (auteurtmp!.isEmpty == false) {
+      auteurtmp.forEach((element) {
+        auteurfinal =
+            auteurfinal + element.text.toString().replaceAll("Par", "") + ", ";
+      });
+    } else {
+      auteurfinal = "";
+    }
     auteurfinal = auteurfinal.replaceAll("  ", "");
 
     var date_temp = DateTime.parse(parser.date());
-    var date = dateFormatter(date_temp) ;
-    return Article(title: titre.toString(),url: urlarticle, auteur: auteurfinal.toString(), description: description.toString(), urlImage: imageurl.toString(), contenu: contenufinal, date: date.toString()) ;
+    var date = dateFormatter(date_temp);
+    return Article(
+        title: titre.toString(),
+        url: urlarticle,
+        auteur: auteurfinal.toString(),
+        description: description.toString(),
+        urlImage: imageurl.toString(),
+        contenu: contenufinal,
+        date: date.toString());
   } catch (e) {
-    return Article(title: 'Une erreur " $e " \n est survenue, veuillez réessayer"',url: urlarticle, auteur:"" , description: "", urlImage: "https://as2.ftcdn.net/v2/jpg/01/94/81/49/1000_F_194814992_UWnjXEu2WbIZefe9ZOAArxFRpVBG2u0M.jpg", contenu: "", date: "");
+    return Article(
+        title: 'Une erreur " $e " \n est survenue, veuillez réessayer"',
+        url: urlarticle,
+        auteur: "",
+        description: "",
+        urlImage:
+            "https://as2.ftcdn.net/v2/jpg/01/94/81/49/1000_F_194814992_UWnjXEu2WbIZefe9ZOAArxFRpVBG2u0M.jpg",
+        contenu: "",
+        date: "");
   }
-
 }
-
 
 Future<List<ListeArticle>> listeFigaro(url) async {
   var liste = List<ListeArticle>.empty(growable: true);
   // recuper le flux atom
   try {
-
     final client = Dio();
+    client.options.connectTimeout = 10000;
     final response = await client.get(url);
     final feed = RssFeed.parse(response.data);
-    for(RssItem rssitem in feed.items!){
+    for (RssItem rssitem in feed.items!) {
       try {
-        if(rssitem.link != null){
-
-          var urlimage = rssitem.media!.contents!.first.url.toString();  //String().split('" width')[0].replaceAll('url="', "").replaceAll('"', "");
-          if(urlimage.isEmpty){urlimage="";}
+        if (rssitem.link != null) {
+          var urlimage = rssitem.media!.contents!.first.url.toString(); //String().split('" width')[0].replaceAll('url="', "").replaceAll('"', "");
+          if (urlimage.isEmpty) {
+            urlimage = "";
+          }
           var date = rssitem.pubDate as DateTime; //"${rssitem.pubDate?.day.toString()} ${rssitem.pubDate?.month.toString()} ${rssitem.pubDate?.year.toString()} " ;
-          liste.add(ListeArticle(url: rssitem.link.toString(), titre: rssitem.title.toString(), urlimage: urlimage, date: date));
+          liste.add(ListeArticle(
+              url: rssitem.link.toString(),
+              titre: rssitem.title.toString(),
+              urlimage: urlimage,
+              date: date));
         }
-      } catch(e){
-
-      }
-
+      } catch (e) {}
     }
     return liste;
-
-  }
-  catch (e) {
-
-    liste.add(ListeArticle(date: DateTime.now(), titre: "erreur", url: "", urlimage: ""));
+  } catch (e) {
+    liste.add(ListeArticle(
+        date: DateTime.now(), titre: "erreur", url: "", urlimage: ""));
     return liste;
   }
-
 }
 
 Future<List<ListeArticle>> AllListeFigaro() async {
@@ -319,28 +371,33 @@ Future<List<ListeArticle>> AllListeFigaro() async {
   final String response = await rootBundle.loadString('assets/sources.json');
   final data = await jsonDecode(response)["items"]["lefigaro"];
   final category = data["rubriques"].toString().split("_");
-  final categoryUrlTemp = data["rss"].toString().replaceAll("{", "").replaceAll("}", "").replaceAll("[", "").replaceAll("]", "").split(",");
+  final categoryUrlTemp = data["rss"]
+      .toString()
+      .replaceAll("{", "")
+      .replaceAll("}", "")
+      .replaceAll("[", "")
+      .replaceAll("]", "")
+      .split(",");
   final category_lenght = category.length;
   var url = List<String>.empty(growable: true);
   var indexTmp = 0;
-  while(indexTmp<category_lenght) {
-    url.add(categoryUrlTemp[indexTmp].split(': ')[1].replaceAll(RegExp(r""), ""));
+  while (indexTmp < category_lenght) {
+    url.add(
+        categoryUrlTemp[indexTmp].split(': ')[1].replaceAll(RegExp(r""), ""));
     indexTmp++;
   }
   // recuperer les flux rss
 
   var liste_article = List<ListeArticle>.empty(growable: true);
-  indexTmp=0;
-  while(indexTmp<category_lenght) {
+  indexTmp = 0;
+  while (indexTmp < category_lenght) {
     liste_article.addAll(await listeFigaro(url[indexTmp]));
     indexTmp++;
   }
-  liste_article.sort((a, b){
+  liste_article.sort((a, b) {
     return b.date.compareTo(a.date);
-  } );
+  });
   return liste_article;
-
-
 }
 
 Future<bool> _requestWritePermission() async {
@@ -362,8 +419,3 @@ String dateFormatter(DateTime date) {
       " " +
       date.year.toString();
 }
-
-
-
-
-

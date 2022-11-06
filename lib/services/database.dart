@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pressreaderflutter/models/RssSource.dart';
+import 'package:pressreaderflutter/models/RssSourceModel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:pressreaderflutter/models/article.dart';
 
@@ -35,7 +35,7 @@ class DatabaseService {
           ")");
 
       //créer la table pour ajouter des sources rss
-      await db.execute("CREATE TABLE RssSources(name TEXT PRIMARY KEY, imagepath TEXT, url TEXT, rubriques TEXT, rss TEXT )");
+      await db.execute("CREATE TABLE RssSources(name TEXT PRIMARY KEY, imagepath TEXT, isparsingsupported INTEGER, url TEXT, rubriques TEXT, rss TEXT )");
     }
     );
   }
@@ -64,7 +64,7 @@ class DatabaseService {
     List<RssSourceModel> rssSources = List.generate(maps.length, (index) => RssSourceModel.fromMap(maps[index]));
 
     if(rssSources.isEmpty){
-      rssSources = [RssSourceModel(name: "any",url: "", imagepath: "", rubriques: List<String>.empty(), rss: List<String>.empty())];
+      rssSources = [RssSourceModel(name: "any",url: "", imagepath: "",isparsingsupported: false, rubriques: List<String>.empty(), rss: List<String>.empty())];
     }
 
     return rssSources;

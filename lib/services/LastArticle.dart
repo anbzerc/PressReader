@@ -4,7 +4,7 @@ import 'dart:core';
 
 import 'package:pressreaderflutter/models/article.dart';
 import 'package:flutter/services.dart';
-import 'package:pressreaderflutter/models/RssSource.dart';
+import 'package:pressreaderflutter/models/RssSourceModel.dart';
 import 'package:pressreaderflutter/services/RssParser.dart';
 import 'package:webfeed/webfeed.dart';
 import 'package:xml/xml.dart';

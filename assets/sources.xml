@@ -39,13 +39,13 @@
     <item>
         <feedname>Opex360</feedname>
         <description>Actualitée de la défense et de la sécurité</description>
-        <isparsingsupported>true</isparsingsupported>
+        <isparsingsupported>false</isparsingsupported>
         <imagepath>assets/MediaIcons/zone-militaire.png</imagepath>
         <feedurl>http://www.opex360.com</feedurl>
         <categories>
             <source>
                 <feedname>Feed</feedname>
-                <feedurl>http://www.opex360.com/feed/</feedurl>
+                <feedurl>http://www.opex360.com/feed</feedurl>
             </source>
         </categories>
     </item>

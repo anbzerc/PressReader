@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pressreaderflutter/models/RssSource.dart';
+import 'package:pressreaderflutter/models/RssSourceModel.dart';
 import 'package:pressreaderflutter/services/LastArticle.dart';
 import 'package:pressreaderflutter/services/database.dart';
 import 'package:sqflite/sqflite.dart';

@@ -28,9 +28,10 @@ final List<bool> _FirstPageSelected = <bool>[true, false];
 final List<bool> _PageSelected = <bool>[false, true, false];
 
 class Opex360State extends StatefulWidget {
+  final String urlpourlaliste;
   const Opex360State({super.key, required this.urlpourlaliste});
 
-  final String urlpourlaliste;
+
 
   @override
   State<Opex360State> createState() => _Opex360(urlpourlaliste: urlpourlaliste,);
@@ -82,7 +83,7 @@ class _Opex360 extends State<Opex360State>{
                                 onTap: () => Navigator.push(
                                     context, MaterialPageRoute(builder: (context) =>
                                     FutureBuilder<Article>(
-                                        future: opex360(snapshot.data![index].url),
+                                        future: opex360Article(snapshot.data![index].url),
                                         builder: (context, snapshot) {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
@@ -132,7 +133,7 @@ class _Opex360 extends State<Opex360State>{
                                           }
                                         }
                                     ))),
-                                child: ListeArticleLayout().ListViewArticleLayout(snapshot.data![index], context),
+                                child: ItemListeArticleLayout().ListViewArticleLayout(snapshot.data![index], context),
                                 //Text(snapshot.data![index].urlimage),
                               );
                             }
@@ -191,7 +192,7 @@ class _Opex360 extends State<Opex360State>{
       );
   }
 }
-Future<Article> opex360(urlarticle) async {
+Future<Article> opex360Article(urlarticle) async {
 //Getting the response from the targeted url
   final response = await Chaleno().load(urlarticle);
 
