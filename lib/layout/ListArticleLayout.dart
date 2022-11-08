@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pressreaderflutter/services/GetArticle.dart';
 
-import '../media/opex360.dart';
+
 import '../models/article.dart';
 
 class ListArticleLayout extends StatelessWidget {
   final Future<List<ListeArticle>> listeArticle;
-  ListArticleLayout({Key? key, required this.listeArticle}) : super(key: key);
+  const ListArticleLayout({Key? key, required this.listeArticle}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ) {
@@ -20,7 +19,7 @@ class ListArticleLayout extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     CircularProgressIndicator(semanticsLabel: "Chargement..."),
                   ],
                 ),
@@ -36,14 +35,13 @@ class ListArticleLayout extends StatelessWidget {
                             scrollDirection: Axis.vertical,
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
-                              var urlimage=snapshot.data![index].urlimage;
                               return GestureDetector(
                                 onTap: () => Navigator.push(
                                     context, MaterialPageRoute(builder: (context) =>
                                     GetArticle(listeArticle: snapshot.data![index]).GetArticleByMediaName()
                                 )
                                 ),
-                                child: ItemListeArticleLayout().ListViewArticleLayout(snapshot.data![index], context),
+                                child: const ItemListeArticleLayout().ListViewArticleLayout(snapshot.data![index], context),
                                 //Text(snapshot.data![index].urlimage),
                               );
                             }

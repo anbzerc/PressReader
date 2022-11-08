@@ -9,12 +9,17 @@ import 'package:pressreaderflutter/services/database.dart';
 
 import '../models/RssSourceModel.dart';
 
-class Journaux extends StatelessWidget {
-  const Journaux({Key? key}) : super(key: key);
 
+
+class Journaux extends StatefulWidget {
+  @override
+  State<Journaux> createState() => _JournauxState();
+}
+
+class _JournauxState extends State<Journaux> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return contenuJournaux(context);
   }
 
   @override
@@ -31,35 +36,64 @@ class Journaux extends StatelessWidget {
                 if (snapshot.data!.first.name != "any") {
                   List<RssSourceModel> rssSource = snapshot.data!;
                   return Expanded(
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: rssSource.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                            onTap: () => Navigator.push(context, MaterialPageRoute(
-                                builder: (context)=> GetListeArticle().listeArticle(rssSource[index])
-                            )
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Card(
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                        rssSource[index].imagepath, width: 90),
-                                    Text(rssSource[index].isparsingsupported.toString())
-                                  ],),
-                              ),
-                            )
-                        );
-                      },),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: IconButton(onPressed: () {
+                            Navigator.of(context).push(PageRouteBuilder(
+                                pageBuilder: (context, animation, secondaryAnimation) => AddSourceScreen(),
+                                reverseTransitionDuration: Duration.zero,
+                                transitionDuration: Duration(milliseconds: 300),
+                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(0.0, 1.0),
+                                      end: Offset.zero,
+                                    ).chain(CurveTween(curve: Curves.linear)).animate(animation),
+                                    child: FadeTransition(opacity: animation, child: child),
+                                  );
+                                },));
+                          },
+                          icon: Icon(Icons.add_rounded),
+                          alignment: Alignment.topLeft),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: rssSource.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                  onTap: () => Navigator.push(context, MaterialPageRoute(
+                                      builder: (context)=> GetListeArticle().listeArticle(rssSource[index])
+                                  )
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Card(
+                                      child: Column(
+                                        children: [
+                                          Image.asset(rssSource[index].imagepath, width: 90),
+                                          Text(rssSource[index].isparsingsupported.toString() )
+                                        ],),
+                                    ),
+                                  )
+                              );
+                            },),
+                        ),
+                      ],
+                    ),
                   );
                 }
                 else {
                   return Row(
                     children: [
-                      TextButton(onPressed: () => showGeneralDialog(
-                          transitionBuilder: (context, animation, secondaryAnimation, child) {
+                      TextButton(onPressed: () {
+                        Navigator.of(context).push(PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => AddSourceScreen(),
+                          reverseTransitionDuration: Duration.zero,
+                          transitionDuration: Duration(milliseconds: 300),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
                             return SlideTransition(
                               position: Tween<Offset>(
                                 begin: const Offset(0.0, 1.0),
@@ -67,21 +101,8 @@ class Journaux extends StatelessWidget {
                               ).chain(CurveTween(curve: Curves.linear)).animate(animation),
                               child: FadeTransition(opacity: animation, child: child),
                             );
-                            return child;
-                          },
-
-                          transitionDuration: const Duration(milliseconds: 400),
-                          context: context,
-                          pageBuilder: (context, animation, secondaryAnimation) {
-                            return Dialog.fullscreen(
-                                child: Column(
-                                  children: [
-                                    AddSourceScreen().build(context)
-                                  ],
-                                )
-                            );
-                          }
-                      ),
+                          },));
+                      },
                           child: Text("Ajouter des sources")),
 
                       SizedBox(

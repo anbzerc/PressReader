@@ -202,7 +202,7 @@ class _HomeState extends ConsumerState<Home> {
 
           color: Colors.white,
           alignment: Alignment.center,
-          child: Journaux().contenuJournaux(context)
+          child: Journaux()
 
         ),
         Container(

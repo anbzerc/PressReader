@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pressreaderflutter/models/article.dart';
 import 'package:chaleno/chaleno.dart';
-import 'package:html/parser.dart' as html_library_parser;
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 import 'package:webfeed/domain/rss_item.dart';
@@ -62,8 +61,7 @@ class LeFigaroWidget extends State<LeFigaro> {
 
   @override
   Widget build(BuildContext context) {
-    flash_actu =
-        listeFigaro("https://www.lefigaro.fr/rss/figaro_flash-actu.xml");
+    flash_actu = listeFigaro("https://www.lefigaro.fr/rss/figaro_flash-actu.xml");
     la_une = listeFigaro(category_map["La Une"]);
     Politique = listeFigaro(category_map["Politique"]);
     International = listeFigaro(category_map["International"]);
@@ -83,7 +81,7 @@ class LeFigaroWidget extends State<LeFigaro> {
                 Container(
                   child: TabBar(
                     labelStyle:
-                        const TextStyle(fontSize: 18, fontFamily: "sansserif"),
+                    const TextStyle(fontSize: 18, fontFamily: "sansserif"),
                     indicatorWeight: 3,
                     indicator: MaterialIndicator(color: Colors.blue),
                     indicatorSize: TabBarIndicatorSize.label,
@@ -124,58 +122,39 @@ class LeFigaroWidget extends State<LeFigaro> {
                                         Expanded(
                                             child: ListView.builder(
                                                 scrollDirection: Axis.vertical,
-                                                itemCount:
-                                                    snapshot.data!.length,
+                                                itemCount: snapshot.data!.length,
                                                 itemBuilder: (context, index) {
-                                                  var urlimage = snapshot
-                                                      .data![index].urlimage;
+                                                  var urlimage = snapshot.data![index].urlimage;
                                                   return GestureDetector(
                                                     onTap: () => Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) => FutureBuilder<
-                                                                    Article>(
-                                                                future: LeFigaroArticle(
-                                                                    snapshot
-                                                                        .data![
-                                                                            index]
-                                                                        .url),
-                                                                builder: (context,
-                                                                    snapshot) {
-                                                                  if (snapshot
-                                                                          .connectionState ==
-                                                                      ConnectionState
-                                                                          .waiting) {
+                                                                Article>(
+                                                                future: LeFigaroArticle(snapshot.data![index].url),
+                                                                builder: (context, snapshot) {
+                                                                  if (snapshot.connectionState == ConnectionState.waiting) {
                                                                     return Center(
                                                                       child:
-                                                                          Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
+                                                                      Column(crossAxisAlignment: CrossAxisAlignment.center,
+                                                                        mainAxisAlignment: MainAxisAlignment.center,
                                                                         children: const [
                                                                           CircularProgressIndicator(
                                                                             semanticsLabel:
-                                                                                "Chargement...",
+                                                                            "Chargement...",
                                                                           ),
                                                                         ],
                                                                       ),
                                                                     );
-                                                                  } else if (snapshot
-                                                                          .connectionState ==
-                                                                      ConnectionState
-                                                                          .done) {
-                                                                    if (snapshot
-                                                                        .hasError) {
-                                                                      return Text(
-                                                                          '${snapshot.error} occurred');
-                                                                    } else if (snapshot
-                                                                        .hasData) {
+                                                                  } else if (snapshot.connectionState == ConnectionState.done) {
+                                                                    if (snapshot.hasError) {
+                                                                      return Text('${snapshot.error} occurred');
+                                                                    } else if (snapshot.hasData) {
                                                                       return Scaffold(
                                                                           bottomNavigationBar:
-                                                                              BottomAppBar(
+                                                                          BottomAppBar(
                                                                             child:
-                                                                                Row(
+                                                                            Row(
                                                                               mainAxisAlignment: MainAxisAlignment.end,
                                                                               children: [
                                                                                 IconButton(
@@ -185,9 +164,9 @@ class LeFigaroWidget extends State<LeFigaro> {
                                                                                       body: WebView(
                                                                                         initialUrl: snapshot.data!.url,
                                                                                       ),
-                                                                                      bottomNavigationBar: BottomAppBar(
+                                                                                      bottomNavigationBar: const BottomAppBar(
                                                                                         child: IconButton(
-                                                                                            onPressed: () => null,
+                                                                                            onPressed: null,
                                                                                             icon: Icon(
                                                                                               Icons.bookmarks_outlined,
                                                                                               color: Colors.grey,
@@ -197,11 +176,11 @@ class LeFigaroWidget extends State<LeFigaro> {
                                                                                       ),
                                                                                     );
                                                                                   })),
-                                                                                  icon: Icon(Icons.language_outlined),
+                                                                                  icon: const Icon(Icons.language_outlined),
                                                                                   color: Colors.grey,
                                                                                 ),
-                                                                                IconButton(
-                                                                                    onPressed: () => null,
+                                                                                const IconButton(
+                                                                                    onPressed: null,
                                                                                     icon: Icon(
                                                                                       Icons.bookmarks_outlined,
                                                                                       color: Colors.grey,
@@ -212,7 +191,7 @@ class LeFigaroWidget extends State<LeFigaro> {
                                                                             ),
                                                                           ),
                                                                           appBar:
-                                                                              AppBar(),
+                                                                          AppBar(),
                                                                           body: SingleChildScrollView(
                                                                               scrollDirection: Axis.vertical,
                                                                               child: Column(
@@ -241,9 +220,9 @@ class LeFigaroWidget extends State<LeFigaro> {
                                                                 }))),
                                                     child: ItemListeArticleLayout()
                                                         .ListViewArticleLayout(
-                                                            snapshot
-                                                                .data![index],
-                                                            context),
+                                                        snapshot
+                                                            .data![index],
+                                                        context),
                                                     //Text(snapshot.data![index].urlimage),
                                                   );
                                                 })),
@@ -253,7 +232,7 @@ class LeFigaroWidget extends State<LeFigaro> {
                                 }
                               } catch (e) {
                                 var liste =
-                                    List<ListeArticle>.empty(growable: true);
+                                List<ListeArticle>.empty(growable: true);
                                 liste.add(ListeArticle(
                                     url: "",
                                     titre: "Erreur ${e}",
@@ -290,28 +269,28 @@ Future<Article> LeFigaroArticle(urlarticle) async {
     var imageurl = parser.urlimage();
 
     var contenu = response?.getElementsByClassName("fig-paragraph").toList();
-    var contenu_a_parser = "";
-    contenu!.forEach((element) {
-      contenu_a_parser = contenu_a_parser + element.html.toString();
-    });
+    var contenuAParser = "";
+    for (var element in contenu!) {
+      contenuAParser = contenuAParser + element.html.toString();
+    }
     var contenufinal =
-        parser.text(contenu_a_parser, textClass: "fig-paragraph");
+    parser.text(contenuAParser, textClass: "fig-paragraph");
 
     var auteurfinal = "Par ";
     var auteurtmp =
-        response?.getElementsByClassName("fig-content-metas__authors");
+    response?.getElementsByClassName("fig-content-metas__authors");
     if (auteurtmp!.isEmpty == false) {
-      auteurtmp.forEach((element) {
+      for (var element in auteurtmp) {
         auteurfinal =
             auteurfinal + element.text.toString().replaceAll("Par", "") + ", ";
-      });
+      }
     } else {
       auteurfinal = "";
     }
     auteurfinal = auteurfinal.replaceAll("  ", "");
 
-    var date_temp = DateTime.parse(parser.date());
-    var date = dateFormatter(date_temp);
+    var dateTemp = DateTime.parse(parser.date());
+    var date = dateFormatter(dateTemp);
     return Article(
         title: titre.toString(),
         url: urlarticle,
@@ -326,8 +305,7 @@ Future<Article> LeFigaroArticle(urlarticle) async {
         url: urlarticle,
         auteur: "",
         description: "",
-        urlImage:
-            "https://as2.ftcdn.net/v2/jpg/01/94/81/49/1000_F_194814992_UWnjXEu2WbIZefe9ZOAArxFRpVBG2u0M.jpg",
+        urlImage: "https://as2.ftcdn.net/v2/jpg/01/94/81/49/1000_F_194814992_UWnjXEu2WbIZefe9ZOAArxFRpVBG2u0M.jpg",
         contenu: "",
         date: "");
   }
@@ -378,26 +356,26 @@ Future<List<ListeArticle>> AllListeFigaro() async {
       .replaceAll("[", "")
       .replaceAll("]", "")
       .split(",");
-  final category_lenght = category.length;
+  final categoryLenght = category.length;
   var url = List<String>.empty(growable: true);
   var indexTmp = 0;
-  while (indexTmp < category_lenght) {
+  while (indexTmp < categoryLenght) {
     url.add(
         categoryUrlTemp[indexTmp].split(': ')[1].replaceAll(RegExp(r""), ""));
     indexTmp++;
   }
   // recuperer les flux rss
 
-  var liste_article = List<ListeArticle>.empty(growable: true);
+  var listeArticle = List<ListeArticle>.empty(growable: true);
   indexTmp = 0;
-  while (indexTmp < category_lenght) {
-    liste_article.addAll(await listeFigaro(url[indexTmp]));
+  while (indexTmp < categoryLenght) {
+    listeArticle.addAll(await listeFigaro(url[indexTmp]));
     indexTmp++;
   }
-  liste_article.sort((a, b) {
+  listeArticle.sort((a, b) {
     return b.date.compareTo(a.date);
   });
-  return liste_article;
+  return listeArticle;
 }
 
 Future<bool> _requestWritePermission() async {

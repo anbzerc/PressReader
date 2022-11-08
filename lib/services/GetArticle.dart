@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pressreaderflutter/media/Lefigaro.dart';
 import 'package:pressreaderflutter/media/opex360.dart';
@@ -8,7 +7,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class GetArticle extends StatelessWidget {
   final ListeArticle listeArticle;
 
-  GetArticle({Key? key, required this.listeArticle}) : super(key: key);
+  const GetArticle({Key? key, required this.listeArticle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class GetArticle extends StatelessWidget {
                 future: LeFigaroArticle(listeArticle.url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return ArticleLayout().articlelayout(snapshot.data!, context);
+                    return const ArticleLayout().articlelayout(snapshot.data!, context);
                   } else
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -37,9 +36,9 @@ class GetArticle extends StatelessWidget {
           ),
           bottomNavigationBar: BottomAppBar(
             height: 15,
-            child: Row(children: [
+            child: Row(children: const [
 
-              IconButton(onPressed: () => null,
+              IconButton(onPressed: null,
                   icon: Icon(Icons.bookmarks_outlined, color: Colors.grey,),
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
@@ -59,7 +58,7 @@ class GetArticle extends StatelessWidget {
                   future: opex360Article(listeArticle.url),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return ArticleLayout().articlelayout(snapshot.data!, context);
+                      return const ArticleLayout().articlelayout(snapshot.data!, context);
                     } else
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
@@ -71,9 +70,9 @@ class GetArticle extends StatelessWidget {
             ),
             bottomNavigationBar: BottomAppBar(
               height: 15,
-              child: Row(children: [
+              child: Row(children: const [
 
-                IconButton(onPressed: () => null,
+                IconButton(onPressed: null,
                     icon: Icon(Icons.bookmarks_outlined, color: Colors.grey,),
                     alignment: Alignment.centerRight,
                     padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
@@ -91,9 +90,9 @@ class GetArticle extends StatelessWidget {
             body: WebView(initialUrl: listeArticle.url),
             bottomNavigationBar: BottomAppBar(
               height: 15,
-              child: Row(children: [
+              child: Row(children: const [
 
-                IconButton(onPressed: () => null,
+                IconButton(onPressed: null,
                     icon: Icon(Icons.bookmarks_outlined, color: Colors.grey,),
                     alignment: Alignment.centerRight,
                     padding: EdgeInsets.fromLTRB(5, 5, 15, 5)),
