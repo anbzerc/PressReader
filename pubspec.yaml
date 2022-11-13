@@ -83,6 +83,8 @@ flutter:
     - assets/sources.json
     - assets/newspaperIcons.jpg
     - assets/sources.xml
+    - assets/MediaIcons/valeurs-actuelles.png
+    - assets/MediaIcons/logo-bv-h50.png
   fonts:
     - family: Caveat
       fonts:

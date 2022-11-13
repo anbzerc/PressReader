@@ -48,7 +48,10 @@ class GetListeArticle {
 
             return Scaffold(
                 appBar: AppBar(
-                  title: Text(rssSource.url.toString() + rssSource.name),
+
+                  title: SizedBox(
+                      width: 100,
+                      child: Image.asset(rssSource.imagepath)),
                   centerTitle: true,
                 ),
                 body: DefaultTabController(

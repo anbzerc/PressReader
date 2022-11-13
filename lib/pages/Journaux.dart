@@ -60,7 +60,7 @@ class _JournauxState extends State<Journaux> {
                         ),
                         Expanded(
                           child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
+                            scrollDirection: Axis.vertical,
                             itemCount: rssSource.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
@@ -74,7 +74,6 @@ class _JournauxState extends State<Journaux> {
                                       child: Column(
                                         children: [
                                           Image.asset(rssSource[index].imagepath, width: 90),
-                                          Text(rssSource[index].isparsingsupported.toString() )
                                         ],),
                                     ),
                                   )
@@ -128,7 +127,7 @@ class _JournauxState extends State<Journaux> {
             },
           ),
           //Media
-          const Divider(color: Colors.grey,),
+          /*const Divider(color: Colors.grey,),
           SizedBox(
               width: 330,
               height: 190,
@@ -176,7 +175,7 @@ class _JournauxState extends State<Journaux> {
                     )
                 ),
               )
-          )
+          )*/
 
 
         ],
