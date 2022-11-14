@@ -68,12 +68,7 @@ class LeFigaroWidget extends State<LeFigaro> {
     Societe = listeFigaro(category_map["Société"]);
     Sante = listeFigaro(category_map["Santé"]);
 
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text("Le Figaro"),
-        ),
-        body: DefaultTabController(
+    return DefaultTabController(
             animationDuration: Duration.zero,
             length: category.length,
             child: Column(
@@ -113,7 +108,15 @@ class LeFigaroWidget extends State<LeFigaro> {
                                   ),
                                 );
                               } else*/
-                                if (snapshot.hasData) {
+                                if(snapshot.connectionState == ConnectionState.waiting){
+                                  return const Center(
+                                    child: CircularProgressIndicator(
+                                      semanticsLabel:
+                                      "Chargement...",
+                                    ),
+                                  );
+                                }
+                                if (snapshot.connectionState == ConnectionState.done) {
                                   if (snapshot.hasError) {
                                     return Text('${snapshot.error} occurred');
                                   } else if (snapshot.hasData) {
@@ -251,7 +254,7 @@ class LeFigaroWidget extends State<LeFigaro> {
                   ),
                 ),
               ],
-            )));
+            ));
   }
 }
 

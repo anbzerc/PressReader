@@ -63,9 +63,10 @@ class _JournauxState extends State<Journaux> {
                             scrollDirection: Axis.vertical,
                             itemCount: rssSource.length,
                             itemBuilder: (context, index) {
+
                               return GestureDetector(
                                   onTap: () => Navigator.push(context, MaterialPageRoute(
-                                      builder: (context)=> GetListeArticle().listeArticle(rssSource[index])
+                                      builder: (context)=> GetListeArticle().listeArticle(rssSource[index], context)
                                   )
                                   ),
                                   child: Padding(

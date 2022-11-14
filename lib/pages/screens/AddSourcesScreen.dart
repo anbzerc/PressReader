@@ -29,8 +29,7 @@ class AddSourceScreen extends StatelessWidget {
                 builder: (context, snapshot){
                   if(snapshot.hasData) {
                     List<RssSourceModel> rssSource = snapshot.data!;
-                    return Expanded(
-                      child: ListView.builder(
+                    return ListView.builder(
                         itemCount: rssSource.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
@@ -49,8 +48,7 @@ class AddSourceScreen extends StatelessWidget {
                                 ),
                               )
                           );
-                        },),
-                    );
+                        },);
 
                   }else if (snapshot.connectionState == ConnectionState.waiting){
                     return const Center(child: CircularProgressIndicator());
