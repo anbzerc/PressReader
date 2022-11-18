@@ -1,5 +1,6 @@
 
 
+import 'package:animated_shimmer/animated_shimmer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart' as parser;
@@ -54,14 +55,117 @@ class _Opex360 extends State<Opex360State>{
             future: futurelistearticle,
             builder: (context, snapshot){
               if (snapshot.connectionState == ConnectionState.waiting){
-                return Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(semanticsLabel: "Chargement..."),
-                    ],
-                  ),
+                return Column(
+
+                  children: [
+                    AnimatedShimmer(
+                      width: MediaQuery.of(context).size.width-38,
+                      delayInMilliSeconds: const Duration(milliseconds: 400),
+                      height: 200,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(19, 14, 19, 0),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedShimmer(
+                          width: MediaQuery.of(context).size.width-290,
+                          delayInMilliSeconds: const Duration(milliseconds: 400),
+                          height: 17,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(19, 11, 19, 0),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedShimmer(
+                          width: MediaQuery.of(context).size.width,
+                          delayInMilliSeconds: const Duration(milliseconds: 400),
+                          height: 22,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(19, 4, 19, 0),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedShimmer(
+                          width: MediaQuery.of(context).size.width,
+                          delayInMilliSeconds: const Duration(milliseconds: 400),
+                          height: 22,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                      ),
+                    ),
+                    Padding(
+
+                      padding: const EdgeInsets.fromLTRB(19, 4, 19, 0),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedShimmer(
+                          width: MediaQuery.of(context).size.width/8*3,
+                          delayInMilliSeconds: const Duration(milliseconds: 400),
+                          height: 22,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                      ),
+                    ),
+
+
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(19, 20, 19, 0),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedShimmer(
+                          width: MediaQuery.of(context).size.width-300,
+                          delayInMilliSeconds: const Duration(milliseconds: 400),
+                          height: 15,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(19, 11, 19, 0),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedShimmer(
+                          width: MediaQuery.of(context).size.width,
+                          delayInMilliSeconds: const Duration(milliseconds: 400),
+                          height: 17,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(19, 4, 19, 0),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedShimmer(
+                          width: MediaQuery.of(context).size.width,
+                          delayInMilliSeconds: const Duration(milliseconds: 400),
+                          height: 17,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                      ),
+                    ),
+                    Padding(
+
+                      padding: const EdgeInsets.fromLTRB(19, 4, 19, 10),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedShimmer(
+                          width: MediaQuery.of(context).size.width/4,
+                          delayInMilliSeconds: const Duration(milliseconds: 400),
+                          height: 17,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               } else if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
@@ -89,13 +193,10 @@ class _Opex360 extends State<Opex360State>{
                                               ConnectionState.waiting) {
                                             return Center(
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment
-                                                    .center,
-                                                mainAxisAlignment: MainAxisAlignment
-                                                    .center,
-                                                children: const [
-                                                  CircularProgressIndicator(
-                                                    semanticsLabel: "Chargement...",),
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  CircularProgressIndicator(semanticsLabel: "Chargement..."),
                                                 ],
                                               ),
                                             );
@@ -133,7 +234,7 @@ class _Opex360 extends State<Opex360State>{
                                           }
                                         }
                                     ))),
-                                child: ItemListeArticleLayout().ListViewArticleLayout(snapshot.data![index], context),
+                                child: ItemListeArticleLayout(snapshot.data![index]),
                                 //Text(snapshot.data![index].urlimage),
                               );
                             }

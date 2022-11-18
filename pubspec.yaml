@@ -47,10 +47,11 @@ dependencies:
   path_provider: any
   flutter_html: ^2.2.1
   webfeed: any
+  animated_shimmer: ^1.0.0
   dart_rss: ^2.0.1
   cached_network_image_builder: ^0.2.0
   tab_indicator_styler: ^2.0.0
-  webview_flutter: ^2.8.0
+  flutter_inappwebview: ^5.7.1+1
   xml: ^5.0.2
   flutter_riverpod: ^2.1.1
 

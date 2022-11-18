@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'article.dart';
+import 'article.dart';
+
 class ListeArticle{
   final String url;
   final String titre;
@@ -208,19 +211,29 @@ class ArticleLayout extends StatelessWidget {
 
   }}
 
-class ItemListeArticleLayout extends StatelessWidget {
-  const ItemListeArticleLayout({Key? key}) : super(key: key);
+class ItemListeArticleLayout extends StatefulWidget {
+  final ListeArticle listeArticle;
+  const ItemListeArticleLayout(this.listeArticle, {Key? key}) : super(key: key);
 
+  @override
+  State<ItemListeArticleLayout> createState() => _ItemListeArticleLayoutState(listeArticle);
+}
+
+class _ItemListeArticleLayoutState extends State<ItemListeArticleLayout> {
+  final ListeArticle listeArticle;
+  _ItemListeArticleLayoutState(this.listeArticle);
 
   @override
   Widget build(BuildContext context) {
     late Future<List<ListeArticle>> futurelistearticle;
-    return ListViewArticleLayout(ListeArticle as ListeArticle, context);
+    return ListViewArticleLayout(listeArticle, context);
   }
 
   @override
+  // pour afficher une item de typer ListeArticle
   Widget ListViewArticleLayout(ListeArticle ListeArticle, BuildContext context){
-    var is_image = true;
+    var is_image=true;
+    var _opacity = 1.0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -291,8 +304,4 @@ class ItemListeArticleLayout extends StatelessWidget {
 
 
   }
-
-
-
-
 }

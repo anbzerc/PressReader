@@ -17,6 +17,7 @@ class Journaux extends StatefulWidget {
 }
 
 class _JournauxState extends State<Journaux> {
+  late Future<List<RssSourceModel>> _listersssource;
   @override
   Widget build(BuildContext context) {
     return contenuJournaux(context);
@@ -24,13 +25,13 @@ class _JournauxState extends State<Journaux> {
 
   @override
   Widget contenuJournaux(BuildContext context){
-
+    _listersssource = DatabaseService.instance.GetAllRssSource();
     return Scaffold(
       body: Column(
         children: [
           //thematiques
           FutureBuilder(
-            future: DatabaseService.instance.GetAllRssSource(),
+            future: _listersssource,
             builder: (context, snapshot) {
               if(snapshot.hasData){
                 if (snapshot.data!.first.name != "any") {
@@ -42,21 +43,24 @@ class _JournauxState extends State<Journaux> {
                           width: MediaQuery.of(context).size.width,
                           child: IconButton(onPressed: () {
                             Navigator.of(context).push(PageRouteBuilder(
-                                pageBuilder: (context, animation, secondaryAnimation) => AddSourceScreen(),
-                                reverseTransitionDuration: Duration.zero,
-                                transitionDuration: Duration(milliseconds: 300),
-                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(0.0, 1.0),
-                                      end: Offset.zero,
-                                    ).chain(CurveTween(curve: Curves.linear)).animate(animation),
-                                    child: FadeTransition(opacity: animation, child: child),
-                                  );
-                                },));
+                              pageBuilder: (context, animation, secondaryAnimation) => AddSourceScreen(),
+                              reverseTransitionDuration: Duration.zero,
+                              transitionDuration: Duration(milliseconds: 300),
+                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(0.0, 1.0),
+                                    end: Offset.zero,
+                                  ).chain(CurveTween(curve: Curves.linear)).animate(animation),
+                                  child: FadeTransition(opacity: animation, child: child),
+                                );
+                              },)).then((value) => setState(() {
+                              _listersssource = DatabaseService.instance.GetAllRssSource();
+                            }));
+
                           },
-                          icon: Icon(Icons.add_rounded),
-                          alignment: Alignment.topLeft),
+                              icon: Icon(Icons.add_rounded),
+                              alignment: Alignment.topLeft),
                         ),
                         Expanded(
                           child: ListView.builder(
@@ -65,10 +69,14 @@ class _JournauxState extends State<Journaux> {
                             itemBuilder: (context, index) {
 
                               return GestureDetector(
-                                  onTap: () => Navigator.push(context, MaterialPageRoute(
-                                      builder: (context)=> GetListeArticle().listeArticle(rssSource[index], context)
+                                  onTap: () { Navigator.push(context, PageRouteBuilder(
+
+                                      pageBuilder: (context, animation, secondaryAnimation) => GetListeArticle().listeArticle(rssSource[index], context)
                                   )
-                                  ),
+                                  ).then((value) => setState(() {
+                                    _listersssource = DatabaseService.instance.GetAllRssSource();
+                                  }));
+                                    },
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Card(
@@ -101,7 +109,10 @@ class _JournauxState extends State<Journaux> {
                               ).chain(CurveTween(curve: Curves.linear)).animate(animation),
                               child: FadeTransition(opacity: animation, child: child),
                             );
-                          },));
+                          },
+                        )
+                        ).then((value) => setState(() {
+                        }));
                       },
                           child: Text("Ajouter des sources")),
 
@@ -127,58 +138,6 @@ class _JournauxState extends State<Journaux> {
               }
             },
           ),
-          //Media
-          /*const Divider(color: Colors.grey,),
-          SizedBox(
-              width: 330,
-              height: 190,
-              child:GestureDetector(
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Opex 360'),
-                    ),
-                    body: Opex360State(urlpourlaliste: "http://www.opex360.com",)))),
-                child: Card(
-                    semanticContainer: true,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                    margin: EdgeInsets.all(10.0),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ClipRRect(borderRadius: BorderRadius.circular(15.0),
-                          child: Image.asset("assets/globe.jpg"),),
-                        Text("Opex360", style: TextStyle(fontSize: 25, fontFamily: "titre", color: Colors.blue),),
-
-                      ],
-                    )
-                ),
-              )
-          ),
-          SizedBox(
-              width: 330,
-              height: 190,
-              child:GestureDetector(
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> LeFigaro())),
-                child: Card(
-                    semanticContainer: true,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                    margin: EdgeInsets.all(10.0),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ClipRRect(borderRadius: BorderRadius.circular(15.0),
-                          child: Image.asset("assets/globe.jpg"),),
-                        Text("Le figaro", style: TextStyle(fontSize: 25, fontFamily: "titre", color: Colors.blue),),
-
-                      ],
-                    )
-                ),
-              )
-          )*/
-
-
         ],
       ),
     );

@@ -6,60 +6,39 @@ import 'package:pressreaderflutter/models/RssSourceModel.dart';
 import 'package:pressreaderflutter/models/article.dart';
 import 'package:pressreaderflutter/services/DefaultRssSource.dart';
 import 'package:pressreaderflutter/services/database.dart';
+import 'package:pressreaderflutter/widgets/MediaAppBar.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 // la classe qui va retourner le widget d'affichage de l'article d'apres son url
 // si le parsing est supporté c'est une classe custom
 // sinon c'est une classe générale qui ouvre une webview
 
-class GetListeArticle {
+class GetListeArticle extends StatelessWidget {
+
+  const GetListeArticle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+
   Scaffold listeArticle(RssSourceModel rssSource, BuildContext context) {
 
     switch (rssSource.url) {
       case 'https://www.lefigaro.fr' :
         return Scaffold(
-          appBar: AppBar(
-            actions: [
-              IconButton(onPressed: () {
-                DatabaseService.instance.DeleteRssSource(rssSource);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Source suprimée")));
-              }, icon: Icon(Icons.star_outlined,))],
-            title: SizedBox(
-                width: 100,
-                child: Image.asset(rssSource.imagepath)),
-            centerTitle: true,
-          ),
+          appBar: MediaAppBar(rssSource, context),
           body: LeFigaro(),
         );
       case 'http://www.lefigaro.fr' :
         return Scaffold(
-          appBar: AppBar(
-            actions: [
-              IconButton(onPressed: () {
-                DatabaseService.instance.DeleteRssSource(rssSource);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Source suprimée")));
-              }, icon: Icon(Icons.star_outlined,))],
-            title: SizedBox(
-                width: 100,
-                child: Image.asset(rssSource.imagepath)),
-            centerTitle: true,
-          ),
+          appBar: MediaAppBar(rssSource, context),
           body: LeFigaro(),
         );
 
       case 'http://www.opex360.com':
         return Scaffold(
-          appBar: AppBar(
-            actions: [
-              IconButton(onPressed: () {
-                DatabaseService.instance.DeleteRssSource(rssSource);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Source suprimée")));
-              }, icon: Icon(Icons.star_outlined,))],
-            title: SizedBox(
-                width: 100,
-                child: Image.asset(rssSource.imagepath)),
-            centerTitle: true,
-          ),
+          appBar: MediaAppBar(rssSource, context),
           body: Opex360State(urlpourlaliste: rssSource.url),
         );
 
@@ -73,17 +52,7 @@ class GetListeArticle {
                   (index) => DefaultRssSource(rssSource.rss[index]).ArticleList());
 
           return Scaffold(
-              appBar: AppBar(
-                actions: [
-                  IconButton(onPressed: () {
-                    DatabaseService.instance.DeleteRssSource(rssSource);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Source suprimée")));
-                  }, icon: Icon(Icons.star_outlined,))],
-                title: SizedBox(
-                    width: 100,
-                    child: Image.asset(rssSource.imagepath)),
-                centerTitle: true,
-              ),
+              appBar: MediaAppBar(rssSource, context),
               body: DefaultTabController(
                 animationDuration: Duration.zero,
                 length: urls.length,
@@ -113,17 +82,7 @@ class GetListeArticle {
               ));
         }else{
           return Scaffold(
-            appBar: AppBar(
-              actions: [
-                IconButton(onPressed: () {
-                  DatabaseService.instance.DeleteRssSource(rssSource);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Source suprimée")));
-                }, icon: Icon(Icons.star_outlined,))],
-              title: SizedBox(
-                  width: 100,
-                  child: Image.asset(rssSource.imagepath)),
-              centerTitle: true,
-            ),
+            appBar: MediaAppBar(rssSource, context),
             body: ListArticleLayout(listeArticle: DefaultRssSource(rssSource.rss.first).ArticleList()),
           );
         }
