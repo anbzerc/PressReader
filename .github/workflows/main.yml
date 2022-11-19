@@ -28,7 +28,7 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: $
-      - uses: anbzerc/flutter-action@v1
+      - uses: actions/flutter-action@v1
         with:
           flutter-version: $
       - run: flutter pub get
