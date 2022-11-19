@@ -31,7 +31,8 @@ jobs:
     - uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.0.0'
-    - run: flutter config --no-analytics    
+    - run: flutter config --no-analytics  
+    - run: flutter upgrade
     - run: flutter pub get
     - run: flutter test
     - run: flutter analyse
