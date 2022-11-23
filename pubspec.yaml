@@ -37,7 +37,7 @@ dependencies:
   chaleno: ^0.0.6
   bottom_bar: ^2.0.2
   web_scraper: ^0.1.4
-  cached_network_image: ^3.2.2
+  cached_network_image: ^3.2.1
   flutter_cache_manager: ^3.3.0
   sqflite: any
   path: any
