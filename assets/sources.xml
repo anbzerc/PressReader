@@ -71,12 +71,40 @@
         <feedname>Boulevard Voltaire</feedname>
         <description>Boulevard voltaire, la liberté guide nos pas</description>
         <isparsingsupported>false</isparsingsupported>
-        <imagepath>assets/MediaIcons/logo-bv-h50.png</imagepath>
+        <imagepath>assets/MediaIcons/boulevard-voltaire-logo.png</imagepath>
         <feedurl>https://www.bvoltaire.fr/</feedurl>
         <categories>
             <source>
                 <feedname>Feed</feedname>
                 <feedurl>https://www.bvoltaire.fr/feed/</feedurl>
+            </source>
+        </categories>
+    </item>
+
+    <item>
+        <feedname>Aerion24news</feedname>
+        <description>Le site d'information des publications d'Areion Group</description>
+        <isparsingsupported>false</isparsingsupported>
+        <imagepath>assets/MediaIcons/aeirion24news-logo.png</imagepath>
+        <feedurl>https://www.areion24.news/</feedurl>
+        <categories>
+            <source>
+                <feedname>Feed</feedname>
+                <feedurl>https://www.areion24.news/feed/</feedurl>
+            </source>
+        </categories>
+    </item>
+
+    <item>
+        <feedname>Causeur</feedname>
+        <description>Surtout si vous n'êtes pas d'accord</description>
+        <isparsingsupported>false</isparsingsupported>
+        <imagepath>assets/MediaIcons/causeur-logo.png</imagepath>
+        <feedurl>https://www.causeur.fr/</feedurl>
+        <categories>
+            <source>
+                <feedname>Feed</feedname>
+                <feedurl>https://www.causeur.fr/feed</feedurl>
             </source>
         </categories>
     </item>

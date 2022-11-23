@@ -38,6 +38,10 @@ class RssSourceModel {
     };
   }
 
+  factory RssSourceModel.empty(){
+    return RssSourceModel(name: "", imagepath: "", isparsingsupported: false, url: "", rubriques: ["rubriques"], rss: ["rss"]);
+  }
+
 
   factory RssSourceModel.fromMap(Map<String, dynamic> map) {
 

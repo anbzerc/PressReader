@@ -87,7 +87,12 @@ class GetArticle extends StatelessWidget {
         return SafeArea(
           child: Scaffold(
             appBar: AppBar(),
-            body: WebView(initialUrl: listeArticle.url),
+            body: SafeArea(
+              child: WebView(
+                  initialUrl: listeArticle.url,
+                  ),
+            ),
+
             bottomNavigationBar: BottomAppBar(
               height: 15,
               child: Row(children: const [

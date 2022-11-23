@@ -85,7 +85,9 @@ flutter:
     - assets/newspaperIcons.jpg
     - assets/sources.xml
     - assets/MediaIcons/valeurs-actuelles.png
-    - assets/MediaIcons/logo-bv-h50.png
+    - assets/MediaIcons/boulevard-voltaire-logo.png
+    - assets/MediaIcons/causeur-logo.png
+    - assets/MediaIcons/aeirion24news-logo.png
   fonts:
     - family: Caveat
       fonts:

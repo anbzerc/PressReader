@@ -251,9 +251,9 @@ class _ItemListeArticleLayoutState extends State<ItemListeArticleLayout> {
                 fadeInDuration: const Duration(milliseconds: 400),
                 placeholder: (context, string) => const SizedBox(height: 200, width: 400, child: null,),
                 cacheManager: CacheManager(Config(
-                  "images",
-                  maxNrOfCacheObjects: 100,
-                  stalePeriod: const Duration(minutes: 5)
+                    "images",
+                    maxNrOfCacheObjects: 100,
+                    stalePeriod: const Duration(minutes: 5)
                 )),
                 filterQuality: FilterQuality.high,
                 imageUrl: ListeArticle.urlimage,
@@ -261,7 +261,7 @@ class _ItemListeArticleLayoutState extends State<ItemListeArticleLayout> {
                   is_image=false;
                   return Text(ListeArticle.urlimage.toString());
                 },
-                ),
+              ),
             ),
           )
         ],
@@ -275,6 +275,24 @@ class _ItemListeArticleLayoutState extends State<ItemListeArticleLayout> {
             padding: const EdgeInsets.fromLTRB(19, 10, 19, 0),
             child: Image.asset("assets/MediaIcons/zone-militaire.png", width: 96.66666666666667, height: 23.333333333333332, filterQuality: FilterQuality.high,),
           ),
+        }else if(ListeArticle.url.contains("bvoltaire")==true)...{
+          Padding(
+            padding: const EdgeInsets.fromLTRB(19, 10, 19, 0),
+            child: Image.asset("assets/MediaIcons/boulevard-voltaire-logo.png", width: 96.66666666666667, height: 23.333333333333332, filterQuality: FilterQuality.high,),
+          ),
+        }else if(ListeArticle.url.contains("areion24")==true)...{
+          Padding(
+            padding: const EdgeInsets.fromLTRB(19, 10, 19, 0),
+            child: Image.asset("assets/MediaIcons/aeirion24news-logo.png", width: 96.66666666666667, height: 23.333333333333332, filterQuality: FilterQuality.high,),
+          ),
+        }else if(ListeArticle.url.contains("causeur")==true)...{
+          Padding(
+            padding: const EdgeInsets.fromLTRB(19, 10, 19, 0),
+            child: Image.asset(
+              "assets/MediaIcons/causeur-logo.png", width: 96.66666666666667,
+              height: 23.333333333333332,
+              filterQuality: FilterQuality.high,),
+          )
         },
 
 

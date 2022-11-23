@@ -79,10 +79,12 @@ class _JournauxState extends State<Journaux> {
                                     },
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
-                                    child: Card(
+                                    child: Container(
+
+                                      margin: const EdgeInsets.all(10),
                                       child: Column(
                                         children: [
-                                          Image.asset(rssSource[index].imagepath, width: 90),
+                                          Image.asset(rssSource[index].imagepath, width: 120,),
                                         ],),
                                     ),
                                   )
