@@ -1,4 +1,4 @@
 # PressReader
 
-An open source alternative to google news
+An open source alternative to google news, coded in flutter/dart
 
