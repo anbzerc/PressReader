@@ -22,7 +22,7 @@ class GetArticle extends StatelessWidget {
           body: SingleChildScrollView(
             child: FutureBuilder(
                 future: LeFigaroArticle(listeArticle.url),
-                builder: (context, snapshot) {
+                builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     return const ArticleLayout().articlelayout(snapshot.data!, context);
                   } else
@@ -56,7 +56,7 @@ class GetArticle extends StatelessWidget {
             body: SingleChildScrollView(
               child: FutureBuilder(
                   future: opex360Article(listeArticle.url),
-                  builder: (context, snapshot) {
+                  builder: (context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       return const ArticleLayout().articlelayout(snapshot.data!, context);
                     } else

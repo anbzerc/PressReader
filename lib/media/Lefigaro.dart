@@ -95,8 +95,8 @@ class LeFigaroWidget extends State<LeFigaro> {
                       children: [
                         for (var element in category_map.entries) ...[
                           FutureBuilder(
-                            future: list_futureListeArticle[element.key],
-                            builder: (context, snapshot) {
+                            future: list_futureListeArticle[element.key] as Future<List<ListeArticle>>,
+                            builder: (context, AsyncSnapshot snapshot) {
                               try {
                                 /*if (snapshot.connectionState == ConnectionState.waiting) {
                                 return Center(

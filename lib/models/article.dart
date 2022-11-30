@@ -16,7 +16,7 @@ class ListeArticle{
   final DateTime date;
 
 
-  const ListeArticle({
+  ListeArticle({
     required this.url,
     required this.titre,
     required this.urlimage,

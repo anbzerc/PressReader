@@ -32,7 +32,7 @@ class _JournauxState extends State<Journaux> {
           //thematiques
           FutureBuilder(
             future: _listersssource,
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot snapshot) {
               if(snapshot.hasData){
                 if (snapshot.data!.first.name != "any") {
                   List<RssSourceModel> rssSource = snapshot.data!;

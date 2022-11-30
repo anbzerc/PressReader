@@ -26,7 +26,7 @@ class AddSourceScreen extends StatelessWidget {
           Expanded(
             child: FutureBuilder(
                 future: sources,
-                builder: (context, snapshot){
+                builder: (context, AsyncSnapshot snapshot){
                   if(snapshot.hasData) {
                     List<RssSourceModel> rssSource = snapshot.data!;
                     return ListView.builder(
