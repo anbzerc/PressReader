@@ -35,7 +35,6 @@ class GetArticle extends StatelessWidget {
             ),
           ),
           bottomNavigationBar: BottomAppBar(
-            height: 15,
             child: Row(children: const [
 
               IconButton(onPressed: null,
@@ -69,7 +68,6 @@ class GetArticle extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: BottomAppBar(
-              height: 15,
               child: Row(children: const [
 
                 IconButton(onPressed: null,
@@ -94,7 +92,6 @@ class GetArticle extends StatelessWidget {
             ),
 
             bottomNavigationBar: BottomAppBar(
-              height: 15,
               child: Row(children: const [
 
                 IconButton(onPressed: null,
