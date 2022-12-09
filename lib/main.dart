@@ -1,19 +1,13 @@
 
-import 'dart:convert';
-
-import 'package:animated_shimmer/animated_shimmer.dart';
-import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pressreaderflutter/models/RssSourceModel.dart';
 import 'package:pressreaderflutter/models/article.dart';
 import 'package:pressreaderflutter/pages/Journaux.dart';
 import 'package:pressreaderflutter/media/Lefigaro.dart';
-import 'package:pressreaderflutter/models/article.dart';
-import 'package:pressreaderflutter/media/opex360.dart';
-import 'package:pressreaderflutter/services/LastArticle.dart';
+import 'package:pressreaderflutter/pages/settings.dart';
 import 'package:pressreaderflutter/services/database.dart';
+import 'package:pressreaderflutter/services/renderFromHTML.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -49,23 +43,19 @@ class _HomeState extends ConsumerState<Home> {
   late Future<Article> futureArticle;
   late Future<List<ListeArticle>> futurelistearticle;
   late Future<List<RssSourceModel>> futurersssSources;
-  late DatabaseService _databaseService;
   bool shadowColor = false;
   double? scrolledUnderElevation;
-
+  var _databaseService = DatabaseService.instance;
   @override
   void initState() {
     super.initState();
-    _databaseService = DatabaseService.instance;
   }
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    //futurersssSources = GetLastArticle().listeSources();
     futurelistearticle = AllListeFigaro();
     return Scaffold(
       appBar: AppBar(
-        title: Text("PressReader", style: TextStyle(fontFamily: "Caveat", fontSize: 25),),
+        title: const Text("PressReader", style: TextStyle(fontFamily: "Caveat", fontSize: 25),),
         centerTitle: true,
         shadowColor: shadowColor ? Theme.of(context).colorScheme.shadow : null,
       ),
@@ -106,22 +96,17 @@ class _HomeState extends ConsumerState<Home> {
           child: Journaux()
 
         ),
-        Container(
-          color: Colors.white,
-          alignment: Alignment.center,
-          child: Text("enc cours de deploiement")
-
-        ),
-        Container(
-          color: Colors.white,
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Le Figaro",isparsingsupported: true, imagepath: "imagePath", url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("lE FIGARO"),),
-              MaterialButton(onPressed:() => DatabaseService.instance.DeleteRssSource(RssSourceModel(name: "Opex360", imagepath: "imagePath",isparsingsupported: true, url: "url", rubriques: ["rubriques"], rss: ["rss"])), child: Text("Opex360"),)
-            ],
-          )
-        ),
+       FutureBuilder(
+           future: renderFromHTML().render("https://www.valeursactuelles.com/monde/twitter-files-elon-musk-revele-les-dessous-de-la-censure-du-scandale-hunter-biden"),
+           builder: (context, AsyncSnapshot snapshot) {
+             if(snapshot.hasData){
+               return snapshot.data! ;
+             }
+             else {
+               return Text("en chargement");
+             }
+           },),
+        SettingsPage(),
       ][currentPageIndex],
     );
 

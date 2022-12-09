@@ -108,5 +108,18 @@
             </source>
         </categories>
     </item>
+    <item>
+        <feedname>FranceSoir</feedname>
+        <description>Toute l'actualitée</description>
+        <isparsingsupported>false</isparsingsupported>
+        <imagepath>assets/MediaIcons/francesoir-logo.png</imagepath>
+        <feedurl>https://www.francesoir.fr/</feedurl>
+        <categories>
+            <source>
+                <feedname>Feed</feedname>
+                <feedurl>https://www.francesoir.fr/rss.xml</feedurl>
+            </source>
+        </categories>
+    </item>
 
 </channel>
