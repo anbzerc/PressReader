@@ -121,5 +121,18 @@
             </source>
         </categories>
     </item>
+    <item>
+        <feedname>Contrepoints</feedname>
+        <description>Journal libéral d'actualité en ligne</description>
+        <isparsingsupported>false</isparsingsupported>
+        <imagepath>assets/MediaIcons/contrepoins-logo.png</imagepath>
+        <feedurl>https://www.contrepoints.org/</feedurl>
+        <categories>
+            <source>
+                <feedname>Feed</feedname>
+                <feedurl>https://www.contrepoints.org/feed</feedurl>
+            </source>
+        </categories>
+    </item>
 
 </channel>
